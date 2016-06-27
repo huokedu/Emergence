@@ -2,7 +2,7 @@
     "ScreenWidth": 60,
     "ScreenHeight": 60,
     "Renderer": "SDL",
-    "Font": "8x8Thin.png",
+    "Font": "default.png",
     "Fps": 30,
     "UiForeground": {
         "Red": 255,

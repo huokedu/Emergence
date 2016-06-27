@@ -1,4 +1,6 @@
-﻿using Emergence.Core;
+﻿using System;
+using Emergence.Core;
+using Emergence.Entities;
 using Emergence.Scenes.MainMenu;
 using Emergence.Utilities;
 using libtcod;
@@ -147,13 +149,17 @@ namespace Emergence.Scenes.HomeBase {
 			TCODConsole.root.putChar(TCODConsole.root.getWidth() - 2, 10, (int)TCODSpecialCharacter.SE);
 
 			// Draw current stocks w/ labels
-			TCODConsole.root.print(3, 1, $"Population: 00/00");
-			TCODConsole.root.print(3, 3, $"Medicl: 0000/0000");
-			TCODConsole.root.print(3, 4, $"Mchncl: 0000/0000");
-			TCODConsole.root.print(3, 5, $"Elctcl: 0000/0000");
-			TCODConsole.root.print(3, 6, $"Strtrl: 0000/0000");
-			TCODConsole.root.print(3, 7, $"Food:   0000/0000");
-			TCODConsole.root.print(3, 8, $"Fuel:   0000/0000");
+			TCODConsole.root.print(3, 1, 
+                $"Population: {Game.State.Personnel.Count.ToString("D2")}/{Game.State.MaxPersonnel.ToString("D2")}");
+            var supplyOffset = 3;
+            foreach(var value in Enum.GetValues(typeof(SupplyType))) {
+                var supplyType = (SupplyType)value;
+                TCODConsole.root.print(3, supplyOffset, 
+                    $"{supplyType.GetShortName().PadRight(6)}: " +
+                    $"{Game.State.Supplies[supplyType].ToString("D4")}/" + 
+                    $"{Game.State.MaxSupplies[supplyType].ToString("D4")}");
+                supplyOffset += 1;
+            }
 
 			// Draw left menu options
 			TCODConsole.root.print(23, 1, $"[P]ersonnel");

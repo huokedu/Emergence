@@ -6,6 +6,7 @@ namespace Emergence.Entities.Character {
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string Nickname { get; set; }
+        public Gender Gender { get; set; }
 		public string FullName {
 			get {
 				return $"{FirstName} {LastName}";
@@ -18,8 +19,8 @@ namespace Emergence.Entities.Character {
             }
 		}
 
-		#region Attributes
-		public Dictionary<Attribute, byte> Attributes;
+        #region Attributes
+        public Dictionary<Attribute, byte> Attributes;
 		public byte Strength {
 			get {
 				return Attributes[Attribute.Strength];
@@ -94,10 +95,10 @@ namespace Emergence.Entities.Character {
 				return (byte)Math.Round(average);
 			}
 		}
-		#endregion Attributes
+        #endregion Attributes
 
-		#region Skills
-		public Dictionary<Skill, SkillRank> Skills;
+        #region Skills
+        public Dictionary<Skill, SkillRank> Skills;
 		public SkillRank LargeMeleeWeapons {
 			get {
 				return Skills[Skill.LargeMeleeWeapons];
@@ -243,5 +244,32 @@ namespace Emergence.Entities.Character {
 			}
 		}
 		#endregion Skills
+
+        public Character(string firstName, string lastName, Gender gender) {
+            FirstName = firstName;
+            LastName = lastName;
+            Gender = gender;
+
+            Attributes = new Dictionary<Attribute, byte>();
+            foreach(var value in Enum.GetValues(typeof(Attribute))) {
+                Attributes[(Attribute)value] = 3;
+            }
+
+            Skills = new Dictionary<Skill, SkillRank>();
+            foreach(var value in Enum.GetValues(typeof(Skill))) {
+                Skills[(Skill)value] = SkillRank.F;
+            }
+        }
 	}
+
+    public enum Gender {
+        Male,
+        Female
+    }
+
+    public static class GenderExtensions {
+        public static char GetSymbol(this Gender gender) {
+            return gender == Gender.Male ? (char)11 : (char)12;
+        }
+    }
 }

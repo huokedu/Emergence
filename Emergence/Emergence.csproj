@@ -56,12 +56,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Game.cs" />
+    <Compile Include="Core\GameState.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\SettingsContract.cs" />
     <Compile Include="Entities\Character\Attribute.cs" />
     <Compile Include="Entities\Character\Character.cs" />
+    <Compile Include="Entities\Character\CharacterFactory.cs" />
     <Compile Include="Entities\Character\Skill.cs" />
     <Compile Include="Entities\Character\SkillRank.cs" />
+    <Compile Include="Entities\SupplyType.cs" />
     <Compile Include="Scenes\BaseScene.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,10 +73,11 @@
     <Compile Include="Scenes\MainMenu\Cloud.cs" />
     <Compile Include="Scenes\MainMenu\MainMenuScene.cs" />
     <Compile Include="Scenes\MainMenu\Star.cs" />
-    <Compile Include="Scenes\NewGameState.cs" />
-    <Compile Include="Scenes\SplashscreenState.cs" />
+    <Compile Include="Scenes\NewGameScene.cs" />
+    <Compile Include="Scenes\SplashscreenScene.cs" />
     <Compile Include="Utilities\BlockingConfirmationModal.cs" />
     <Compile Include="Utilities\BlockingMessageModal.cs" />
+    <Compile Include="Utilities\EnumExtensions.cs" />
     <Compile Include="Utilities\NameGenerator.cs" />
     <Compile Include="Utilities\RexPaintImageLoader.cs" />
   </ItemGroup>

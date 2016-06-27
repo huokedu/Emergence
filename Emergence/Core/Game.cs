@@ -27,6 +27,8 @@ namespace Emergence.Core {
 		private BaseScene newScene { get; set; }
 		private bool sceneChanged { get; set; }
 
+        public GameState State { get; set; }
+
 		public Game() {
 			isRunning = false;
 			newScene = null;
