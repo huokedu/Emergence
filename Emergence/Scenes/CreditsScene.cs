@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using Emergence.Core;
-using Emergence.States.MainMenu;
+using Emergence.Scenes.MainMenu;
 using libtcod;
 
-namespace Emergence.States {
-	public class CreditsState : BaseState {
+namespace Emergence.Scenes {
+	public class CreditsScene : BaseScene {
 		private List<string> lines;
 		private float top, stop, scrollSpeed;
 
-		public CreditsState(Game game) : base(game) {
+		public CreditsScene(Game game) : base(game) {
 			LoadLines("Assets/Credits.txt");
 			int height = TCODConsole.root.getHeight();
 			top = height;
@@ -54,7 +54,7 @@ namespace Emergence.States {
 
 		public override void KeyPressed(TCODKey keyData) {
 			if(keyData.KeyCode == TCODKeyCode.Escape) {
-				Game.ChangeState(new MainMenuState(Game));
+				Game.ChangeScene(new MainMenuScene(Game));
 			}
 		}
 

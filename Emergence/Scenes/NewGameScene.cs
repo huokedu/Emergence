@@ -1,13 +1,13 @@
 ﻿using Emergence.Core;
-using Emergence.States.HomeBase;
+using Emergence.Scenes.HomeBase;
 using Emergence.Utilities;
 using libtcod;
 
-namespace Emergence.States {
-	public class NewGameState : BaseState {
+namespace Emergence.Scenes {
+	public class NewGameScene : BaseScene {
 		private string[] placeholderMessage;
 
-		public NewGameState(Game game) : base(game) {
+		public NewGameScene(Game game) : base(game) {
 			placeholderMessage = new string[] {
 				"Character creation has not been implemented yet.",
 				"Your character will be generated at random.",
@@ -27,13 +27,13 @@ namespace Emergence.States {
 		}
 
 		public override void KeyPressed(TCODKey keyData) {
-			// TODO: Generate character(s) and go to next state.
+			// TODO: Generate character(s) and go to next scene.
 			var male = NameGenerator.GenerateName("Male");
 			var female = NameGenerator.GenerateName("Female");
 			var last = NameGenerator.GenerateName("Last");
 			new BlockingMessageModal(TCODColor.white, TCODColor.black, 
 				$"Male: {male}", $"Female: {female}", $"Last: {last}").Show();
-			Game.ChangeState(new HomeBaseState(Game));
+			Game.ChangeScene(new HomeBaseScene(Game));
 		}
 	}
 }

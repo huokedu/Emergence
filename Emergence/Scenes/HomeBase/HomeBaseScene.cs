@@ -1,16 +1,16 @@
 ﻿using Emergence.Core;
-using Emergence.States.MainMenu;
+using Emergence.Scenes.MainMenu;
 using Emergence.Utilities;
 using libtcod;
 
-namespace Emergence.States.HomeBase {
-	public class HomeBaseState : BaseState {
+namespace Emergence.Scenes.HomeBase {
+	public class HomeBaseScene : BaseScene {
 		private TCODConsole baseImage;
 		private TCODConsole labels;
 		private int x, y;
 		private bool roomLabelsEnabled;
 
-		public HomeBaseState(Game game) : base(game) {
+		public HomeBaseScene(Game game) : base(game) {
 			roomLabelsEnabled = false;
 			baseImage = RexPaintImageLoader
 				.LoadImage("Assets/HomeBase/base.xp");
@@ -124,7 +124,7 @@ namespace Emergence.States.HomeBase {
 					};
 					if(confirmationModal.Show()) {
 						// TODO: Save game
-						Game.ChangeState(new MainMenuState(Game));
+						Game.ChangeScene(new MainMenuScene(Game));
 					}
 					break;
 			}

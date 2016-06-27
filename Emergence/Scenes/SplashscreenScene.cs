@@ -2,22 +2,22 @@
 using System.IO;
 using System.Linq;
 using Emergence.Core;
-using Emergence.States.MainMenu;
+using Emergence.Scenes.MainMenu;
 using libtcod;
 
-namespace Emergence.States {
-	public class SplashscreenState : BaseState {
+namespace Emergence.Scenes {
+	public class SplashscreenScene : BaseScene {
 		private TCODImage[] splashscreens { get; }
 		private float delayPerScreen { get; } = 3.0f;
 		private float currentDelay { get; set; }
 		private int currentSplashscreenIndex { get; set; }
 		private TCODImage currentSplashscreen { get; set; }
 
-		public SplashscreenState(Game game) : base(game) {
+		public SplashscreenScene(Game game) : base(game) {
 			splashscreens = Directory.GetFiles("Assets/Splashscreens")
 				.Select(fileName => new TCODImage(fileName)).ToArray();
 			if(splashscreens.Length == 0) {
-				Game.ChangeState(new MainMenuState(Game));
+				Game.ChangeScene(new MainMenuScene(Game));
 				return;
 			}
 			currentDelay = delayPerScreen;
@@ -37,7 +37,7 @@ namespace Emergence.States {
 				if(currentSplashscreenIndex >= splashscreens.Length) {
 					Array.ForEach(splashscreens, s => s.Dispose());
 					currentSplashscreen = null; // To keep render from breaking.
-					Game.ChangeState(new MainMenuState(Game));
+					Game.ChangeScene(new MainMenuScene(Game));
 				} else {
 					currentSplashscreen = splashscreens[currentSplashscreenIndex];
 				}

@@ -1,11 +1,11 @@
 ﻿using Emergence.Core;
 using libtcod;
 
-namespace Emergence.States {
-	public abstract class BaseState {
+namespace Emergence.Scenes {
+	public abstract class BaseScene {
 		public Game Game { get; }
 
-		public BaseState(Game game) {
+		public BaseScene(Game game) {
 			Game = game;
 		}
 

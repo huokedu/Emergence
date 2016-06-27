@@ -4,15 +4,15 @@ using Emergence.Core;
 using Emergence.Utilities;
 using libtcod;
 
-namespace Emergence.States.MainMenu {
-	public class MainMenuState : BaseState {
+namespace Emergence.Scenes.MainMenu {
+	public class MainMenuScene : BaseScene {
 		private TCODConsole background;
 		private TCODColor backgroundColor;
 		private List<Star> starfield;
 		private List<Cloud> clouds;
 		private bool creditsDoneRendering { get; set; }
 
-		public MainMenuState(Game game) : base(game) {
+		public MainMenuScene(Game game) : base(game) {
 			background = RexPaintImageLoader.LoadImage("Assets/MainMenu/Background.xp");
 			backgroundColor = new TCODColor(0, 32, 64);
 			creditsDoneRendering = false;
@@ -59,7 +59,7 @@ namespace Emergence.States.MainMenu {
 		public override void KeyPressed(TCODKey keyData) {
 			switch(char.ToUpper(keyData.Character)) {
 				case 'N':
-					Game.ChangeState(new NewGameState(Game));
+					Game.ChangeScene(new NewGameScene(Game));
 					break;
 
 				case 'L':
@@ -73,7 +73,7 @@ namespace Emergence.States.MainMenu {
 					break;
 
 				case 'C':
-					Game.ChangeState(new CreditsState(Game));
+					Game.ChangeScene(new CreditsScene(Game));
 					break;
 
 				case 'Q':
@@ -83,7 +83,7 @@ namespace Emergence.States.MainMenu {
 						Message = "Are you sure you want to quit?"
 					}.Show();
 					if(confirmQuit) {
-						Game.ChangeState(null);
+						Game.ChangeScene(null);
 					}
 					break;
 			}

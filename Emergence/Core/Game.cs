@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Emergence.States;
+using Emergence.Scenes;
 using libtcod;
 using Newtonsoft.Json;
 
@@ -23,17 +23,17 @@ namespace Emergence.Core {
 
 		private bool isRunning;
 
-		public BaseState CurrentState { get; private set; }
-		private BaseState newState { get; set; }
-		private bool stateChanged { get; set; }
+		public BaseScene CurrentScene { get; private set; }
+		private BaseScene newScene { get; set; }
+		private bool sceneChanged { get; set; }
 
 		public Game() {
 			isRunning = false;
-			newState = null;
-			stateChanged = false;
+			newScene = null;
+			sceneChanged = false;
 		}
 
-		public void Initialize(BaseState initialState = null) {
+		public void Initialize(BaseScene initialScene = null) {
 			Logger.Initialize();
 			windowTitle = "Emergence";
 			Settings = LoadSettings("Assets/config.json");
@@ -47,7 +47,7 @@ namespace Emergence.Core {
 			TCODConsole.initRoot(Settings.ScreenWidth, Settings.ScreenHeight,
 				windowTitle, false, Settings.GetRendererType());
 			previousMouseData = TCODMouse.getStatus();
-			CurrentState = initialState;
+			CurrentScene = initialScene;
 		}
 		private SettingsContract LoadSettings(string filename) {
 			string jsonData = "";
@@ -76,25 +76,25 @@ namespace Emergence.Core {
 		public void Start() {
 			isRunning = true;
 			while(isRunning) {
-				// Check for state change
-				if(stateChanged) {
-					CurrentState = newState;
-					newState = null;
-					stateChanged = false;
+				// Check for scene change
+				if(sceneChanged) {
+					CurrentScene = newScene;
+					newScene = null;
+					sceneChanged = false;
 				}
 
 				// Check if the game is still running.
-				if(TCODConsole.isWindowClosed() || CurrentState == null) {
+				if(TCODConsole.isWindowClosed() || CurrentScene == null) {
 					Stop();
 					break;
 				}
 
 				// Update
-				CurrentState.Update(TCODSystem.getLastFrameLength());
+				CurrentScene.Update(TCODSystem.getLastFrameLength());
 
 				// Render
 				TCODConsole.root.clear();
-				CurrentState.Render(TCODSystem.getLastFrameLength());
+				CurrentScene.Render(TCODSystem.getLastFrameLength());
 				TCODConsole.flush();
 
 				// Handle user input
@@ -103,9 +103,9 @@ namespace Emergence.Core {
 			}
 			CleanUp();
 		}
-		public void ChangeState(BaseState newState) {
-			this.newState = newState;
-			stateChanged = true;
+		public void ChangeScene(BaseScene newScene) {
+			this.newScene = newScene;
+			sceneChanged = true;
 		}
 		public void Stop() {
 			isRunning = false;
@@ -121,28 +121,28 @@ namespace Emergence.Core {
 
 			if (key.KeyCode != TCODKeyCode.NoKey) {
 				if(key.Pressed) {
-					CurrentState.KeyPressed(key);
+					CurrentScene.KeyPressed(key);
 				} else {
-					CurrentState.KeyReleased(key);
+					CurrentScene.KeyReleased(key);
 				}
 			}
 		}
 		private void CheckForMouseEvents() {
 			var mouseData = TCODMouse.getStatus();
 			if(mouseData.CellVelocityX != 0 || mouseData.CellVelocityY != 0) {
-				CurrentState.MouseMoved(mouseData);
+				CurrentScene.MouseMoved(mouseData);
 			}
 			if(mouseData.WheelDown || mouseData.WheelUp) {
-				CurrentState.MouseWheel(mouseData);
+				CurrentScene.MouseWheel(mouseData);
 			}
 			if(mouseData.LeftButton != previousMouseData.LeftButton) {
-				CurrentState.MouseLeftButton(mouseData);
+				CurrentScene.MouseLeftButton(mouseData);
 			}
 			if(mouseData.MiddleButton != previousMouseData.MiddleButton) {
-				CurrentState.MouseMiddleButton(mouseData);
+				CurrentScene.MouseMiddleButton(mouseData);
 			}
 			if(mouseData.RightButton != previousMouseData.RightButton) {
-				CurrentState.MouseRightButton(mouseData);
+				CurrentScene.MouseRightButton(mouseData);
 			}
 			previousMouseData = mouseData;
 		}

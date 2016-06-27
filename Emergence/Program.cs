@@ -1,11 +1,11 @@
 ﻿using Emergence.Core;
-using Emergence.States;
+using Emergence.Scenes;
 
 namespace Emergence {
 	internal class Program {
 		private static void Main(string[] args) {
 			var game = new Game();
-			game.Initialize(new SplashscreenState(game));
+			game.Initialize(new SplashscreenScene(game));
 			game.Start();
 		}
 	}

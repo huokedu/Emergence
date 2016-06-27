@@ -1,6 +1,6 @@
 ﻿using libtcod;
 
-namespace Emergence.States.MainMenu {
+namespace Emergence.Scenes.MainMenu {
 	public class Cloud {
 		public float X { get; set; }
 		public int Y { get; set; }
