@@ -1,0 +1,17 @@
+﻿{
+    "ScreenWidth": 60,
+    "ScreenHeight": 60,
+    "Renderer": "SDL",
+    "Font": "8x8Thin.png",
+    "Fps": 30,
+    "UiForeground": {
+        "Red": 255,
+        "Green": 255,
+        "Blue": 255
+    },
+    "UiBackground": {
+        "Red": 51,
+        "Green": 51,
+        "Blue": 51
+    }
+}

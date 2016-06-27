@@ -1,0 +1,22 @@
+﻿EMERGENCE CREDITS
+
+
+Design and Development
+----------------------
+Timothy Sassone
+
+
+Art Tools
+---------
+Rex Paint - Josh Ge/Grid Sage Games
+
+
+Libraries
+---------
+LibTCod - Jice
+Json.Net - Newtonsoft
+
+
+Other Resources
+---------------
+Name Lists - US Census
