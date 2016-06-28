@@ -1,7 +1,7 @@
 ﻿using System;
 using libtcod;
 
-namespace Emergence.Utilities {
+namespace Emergence.Ui {
 	public class BlockingConfirmationModal {
 		public TCODColor Foreground { get; set; }
 		public TCODColor Background { get; set; }

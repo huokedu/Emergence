@@ -2,7 +2,7 @@
 using System.Linq;
 using libtcod;
 
-namespace Emergence.Utilities {
+namespace Emergence.Ui {
 	public class BlockingMessageModal {
 		public TCODColor Foreground { get; set; }
 		public TCODColor Background { get; set; }
