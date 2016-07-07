@@ -2,6 +2,8 @@
 using Emergence.Core;
 using Emergence.Entities;
 using Emergence.Scenes.MainMenu;
+using Emergence.Scenes.Personnel;
+using Emergence.Ui;
 using Emergence.Utilities;
 using libtcod;
 
@@ -53,11 +55,7 @@ namespace Emergence.Scenes.HomeBase {
 			}
 			switch(char.ToUpper(keyData.Character)) {
 				case 'P': // [P]ersonnel
-					new BlockingMessageModal(
-						Game.Settings.UiForeground,
-						Game.Settings.UiBackground,
-						"This feature is not yet implemented."
-					).Show();
+                    Game.ChangeScene(new PersonnelSkillsScene(Game, this, Game.State.Personnel));
 					break;
 				case 'E': // [E]quipment
 					new BlockingMessageModal(

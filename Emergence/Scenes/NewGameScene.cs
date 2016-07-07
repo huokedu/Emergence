@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Emergence.Core;
 using Emergence.Entities.Character;
 using Emergence.Scenes.HomeBase;
+using Emergence.Ui;
 using Emergence.Utilities;
 using libtcod;
 
@@ -64,7 +65,7 @@ namespace Emergence.Scenes {
             // Render character's name
             var genderSymbol = character.Gender == Gender.Male ? (char)11 : (char)12;
             TCODConsole.root.print(x + 1, y + 1,
-                $"{character.FirstName} {character.LastName} [{character.Gender.GetSymbol()}]");
+                $"{character.Name.ToString("{F} {L}")} [{character.Gender.GetSymbol()}]");
 
             // Add horizontal dividing line
             TCODConsole.root.hline(x + 1, y + 2, 58);

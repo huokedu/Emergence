@@ -3,21 +3,9 @@ using System.Collections.Generic;
 
 namespace Emergence.Entities.Character {
 	public class Character {
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
-		public string Nickname { get; set; }
+		public Name Name { get; set; }
         public Gender Gender { get; set; }
-		public string FullName {
-			get {
-				return $"{FirstName} {LastName}";
-			}
-		}
-		public string ShortName {
-			get {
-				return Nickname ?? $"{FirstName[0]}. {LastName}";
-
-            }
-		}
+        public int ExperiencePoints { get; set; }
 
         #region Attributes
         public Dictionary<Attribute, byte> Attributes;
@@ -246,9 +234,9 @@ namespace Emergence.Entities.Character {
 		#endregion Skills
 
         public Character(string firstName, string lastName, Gender gender) {
-            FirstName = firstName;
-            LastName = lastName;
+            Name = new Name(firstName, lastName);
             Gender = gender;
+            ExperiencePoints = 0;
 
             Attributes = new Dictionary<Attribute, byte>();
             foreach(var value in Enum.GetValues(typeof(Attribute))) {
@@ -261,6 +249,58 @@ namespace Emergence.Entities.Character {
             }
         }
 	}
+
+    public class Name {
+        private string FirstName { get; set; }
+        private string LastName { get; set; }
+        private string Nickname { get; set; }
+
+        public bool HasNickname {
+            get {
+                return !string.IsNullOrEmpty(Nickname);
+            }
+        }
+
+        public Name(string firstName, string lastName) {
+            FirstName = firstName;
+            LastName = lastName;
+            Nickname = null;
+        }
+
+        public void SetNickname(string newNickname) {
+            Nickname = newNickname;
+        }
+
+        public override string ToString() {
+            return ToString("{f}. {L}");
+        }
+        /// <summary>
+        /// Returns the name as a string based on the given format.
+        /// </summary>
+        /// <param name="format">
+        /// The format parameter is a string where certain patterns are replaced with parts of the name.
+        /// Any part of the string which does not match any of the patterns is passed through unchanged.
+        /// The replacable patterns are as follows:
+        /// {f} -> First Initial
+        /// {F} -> First Name
+        /// {n} -> Nickname, if present
+        /// {N} -> Nickname, surrounded by quotation marks, if present
+        /// {?} -> A space, if a nickname is present
+        /// {l} -> Last Initial
+        /// {L} -> Last Name
+        /// </param>
+        /// <returns></returns>
+        public string ToString(string format) {
+            format = format.Replace("{f}", FirstName.Substring(0, 1));
+            format = format.Replace("{F}", FirstName);
+            format = format.Replace("{n}", string.IsNullOrEmpty(Nickname) ? "" : Nickname);
+            format = format.Replace("{N}", string.IsNullOrEmpty(Nickname) ? "" : "\"" + Nickname + "\"");
+            format = format.Replace("{?}", string.IsNullOrEmpty(Nickname) ? "" : " ");
+            format = format.Replace("{l}", LastName.Substring(0, 1));
+            format = format.Replace("{L}", LastName);
+            return format;
+        }
+    }
 
     public enum Gender {
         Male,

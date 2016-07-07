@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emergence.Core;
+using Emergence.Ui;
 using Emergence.Utilities;
 using libtcod;
 

@@ -24,6 +24,31 @@ namespace Emergence.Entities.Character {
 	}
 
 	public static class SkillExtensions {
+        public static string GetName(this Skill skill) {
+            switch(skill) {
+                case Skill.LargeMeleeWeapons:
+                    return "Large Melee Weapons";
+                case Skill.ThrownWeapons:
+                    return "Thrown Weapons";
+                case Skill.HeavyFirearms:
+                    return "Heavy Firearms";
+                case Skill.ArmorUse:
+                    return "Armor Use";
+                case Skill.SmallMeleeWeapons:
+                    return "Small Melee Weapons";
+                case Skill.LightFirearms:
+                    return "Light Firearms";
+                case Skill.BioticsAffinity:
+                    return "Biotics Affinity";
+                case Skill.UnarmedCombat:
+                    return "Unarmed Combat";
+                case Skill.SenseMotive:
+                    return "Sense Motive";
+                default:
+                    return skill.ToString();
+            }
+        }
+
 		public static Attribute GetGoverningAttribute(this Skill skill) {
 			switch(skill) {
 				case Skill.LargeMeleeWeapons:

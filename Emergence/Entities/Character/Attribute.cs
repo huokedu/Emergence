@@ -16,6 +16,18 @@ namespace Emergence.Entities.Character {
 	}
 
 	public static class AttributeExtensions {
+        public static string GetCategoryStatName(this AttributeCategory attributeCategory) {
+            switch(attributeCategory) {
+                case AttributeCategory.Physical:
+                    return "Fitness";
+                case AttributeCategory.Mental:
+                    return "Mental Acuity";
+            }
+            return "ERR - invalid attribute category";
+        }
+        public static string GetName(this Attribute attribute) {
+            return attribute.ToString();
+        }
 		public static AttributeCategory GetCategory(this Attribute attribute) {
 			switch(attribute) {
 				case Attribute.Strength:

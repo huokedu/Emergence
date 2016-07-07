@@ -1,0 +1,91 @@
+Tags: 29
+	v => scrollBarTop
+	c => characterList
+	n => characterName
+	X => experienceLabel
+	F => fitnessLabel
+	f => fitnessValue
+	x => experienceValue
+	S => strengthLabel
+	s => strengthValue
+	E => enduranceLabel
+	e => enduranceValue
+	A => agilityLabel
+	a => agilityValue
+	P => personnelTab
+	M => mentalAcuityLabel
+	m => mentalAcuityValue
+	p => pagesLabel
+	W => willLabel
+	w => willValue
+	K => skillPageLabel
+	R => reasonLabel
+	r => reasonValue
+	I => intuitionLabel
+	i => intuitionValue
+	B => bioticsPageLabel
+	D => woundsPageLabel
+	N => noteLabel
+	k => skillsTab
+	d => description
+Size: 60,60
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++                +v+                                       +
++ c              + +                   n                   +
++                + +                                       +
++                + +                                       +
++                + +  X       F                       f    +
++                + + ++++++ ++++++++++++++++++++++++++++++ +
++                + + +x   + +  S                      s  + +
++                + + ++++++ +                            + +
++                + +        +                            + +
++                + +        +                            + +
++                + +        +                            + +
++                + +        +  E                      e  + +
++                + +        +                            + +
++                + +        +                            + +
++                + +        +                            + +
++                + +        +                            + +
++                + +        +  A                      a  + +
++                + +        +                            + +
++                + +        +                            + +
++                + +        +                            + +
++                + +        ++++++++++++++++++++++++++++++ +
+++++++++++++++++++++                                       +
++ +P            +             M                       m    +
++ +++++++++++++++           ++++++++++++++++++++++++++++++ +
++              p            +  W                      w  + +
++ +++++++++++++++++++++++++ +                            + +
++ +                       + +                            + +
++ +       ++++++++        + +                            + +
++ +   +++++K     +++++    + +                            + +
++ +   +   ++++++++   +    + +  R                      r  + +
++ +   +              +    + +                            + +
++ +   +              +    + +                            + +
++ +   +              +    + +                            + +
++ +   +              +    + +                            + +
++ + +++++++++    ++++++++ + +  I                      i  + +
++ + +B      ++++++D     + + +                            + +
++ + +++++++++    ++++++++ + +                            + +
++ +                       + +                            + +
++ +++++++++++++++++++++++++ ++++++++++++++++++++++++++++++ +
++                                                          +
++ N                                    ++++++++++++        +
++                                      +k         +        +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++                                                          +
++ d                                                        +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
++                                                          +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
