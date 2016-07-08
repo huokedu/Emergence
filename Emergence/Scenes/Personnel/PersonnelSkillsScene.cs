@@ -11,11 +11,11 @@ namespace Emergence.Scenes.Personnel {
         int SelectedCharacterIndex { get; set; }
         Ui.UiLayout UiLayout { get; set; }
 
-        public PersonnelSkillsScene(Game game, BaseScene previousScene, List<Character> characters) : base(game) {
+        public PersonnelSkillsScene(Game game, BaseScene previousScene, List<Character> characters, int selected = 0) : base(game) {
             PreviousScene = previousScene;
             Characters = characters;
-            UiLayout = Ui.UiLayout.Load("Assets/Layouts/CharacterScreenSkills.layout");
-            SelectedCharacterIndex = 0;
+            UiLayout = Ui.UiLayout.Load("Assets/Layouts/CharacterScreenSkills.ui");
+            SelectedCharacterIndex = selected;
         }
 
         public override void Render(float deltaTime) {
@@ -48,6 +48,12 @@ namespace Emergence.Scenes.Personnel {
                 }
             } else if(keyData.KeyCode == TCODKeyCode.Escape) {
                 Game.ChangeScene(PreviousScene);
+            } else if(keyData.KeyCode == TCODKeyCode.Tab) {
+                if(!keyData.Shift) {
+                    Game.ChangeScene(new PersonnelWoundsScene(Game, PreviousScene, Characters, SelectedCharacterIndex));
+                } else {
+                    Game.ChangeScene(new PersonnelBioticsScene(Game, PreviousScene, Characters, SelectedCharacterIndex));
+                }
             }
         }
 

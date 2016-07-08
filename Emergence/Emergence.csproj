@@ -74,6 +74,8 @@
     <Compile Include="Scenes\MainMenu\MainMenuScene.cs" />
     <Compile Include="Scenes\MainMenu\Star.cs" />
     <Compile Include="Scenes\NewGameScene.cs" />
+    <Compile Include="Scenes\Personnel\PersonnelBioticsScene.cs" />
+    <Compile Include="Scenes\Personnel\PersonnelWoundsScene.cs" />
     <Compile Include="Scenes\Personnel\PersonnelSkillsScene.cs" />
     <Compile Include="Scenes\SplashscreenScene.cs" />
     <Compile Include="UI\BlockingConfirmationModal.cs" />
@@ -135,7 +137,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Layouts\CharacterScreenSkills.layout">
+    <None Include="Assets\Layouts\CharacterScreenSkills.ui">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Layouts\CharacterScreenWounds.ui">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Layouts\CharacterScreenBiotics.ui">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
