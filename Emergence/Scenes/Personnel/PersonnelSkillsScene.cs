@@ -9,7 +9,7 @@ namespace Emergence.Scenes.Personnel {
         BaseScene PreviousScene { get; set; }
         List<Character> Characters { get; set; }
         Ui.UiLayout UiLayout { get; set; }
-        UI.UiList<Character> CharacterList { get; set; }
+        Ui.UiList<Character> CharacterList { get; set; }
 
         public PersonnelSkillsScene(Game game, BaseScene previousScene, List<Character> characters, int selected = 0) : base(game) {
             PreviousScene = previousScene;
@@ -65,19 +65,19 @@ namespace Emergence.Scenes.Personnel {
                 $"Personnel {(char)TCODSpecialCharacter.ArrowSouth}/{(char)TCODSpecialCharacter.ArrowNorth}");
         }
         private void RenderCharacterListItem(Point point, Character character, bool isSelected) {
-            var characterName = Characters[currentCharacterIndex].Name.ToString("{f}. {L}");
+            var characterName = character.Name.ToString("{f}. {L}");
             if(isSelected) {
                 TCODConsole.root.setForegroundColor(TCODColor.white);
                 TCODConsole.root.putChar(point.X, point.Y, (char)TCODSpecialCharacter.ArrowEast);
                 TCODConsole.root.putChar(point.X + characterName.Length + 1, point.Y, (char)TCODSpecialCharacter.ArrowWest);
             } else {
-                TCODConsole.root.setForegroundColor(TCODColor.gray);
+                TCODConsole.root.setForegroundColor(TCODColor.grey);
             }
             TCODConsole.root.print(point.X + 1, point.Y, characterName);
         }
         private void RenderCharacterName() {
             var position = UiLayout.GetPoint("characterName");
-            var characterName = Characters[SelectedCharacterIndex].Name.ToString("{F} {N}{?}{L}");
+            var characterName = CharacterList.Selected.Name.ToString("{F} {N}{?}{L}");
             TCODConsole.root.setForegroundColor(TCODColor.white);
             TCODConsole.root.printEx(position.X, position.Y,
                 TCODBackgroundFlag.Set, TCODAlignment.CenterAlignment, characterName);
@@ -86,13 +86,13 @@ namespace Emergence.Scenes.Personnel {
         private void RenderCharacterExp() {
             var labelPosition = UiLayout.GetPoint("experienceLabel");
             var numberPosition = UiLayout.GetPoint("experienceValue");
-            var expString = Characters[SelectedCharacterIndex].ExperiencePoints.ToString("D4");
+            var expString = CharacterList.Selected.ExperiencePoints.ToString("D4");
 
             TCODConsole.root.print(labelPosition.X, labelPosition.Y, "Exp.");
             TCODConsole.root.print(numberPosition.X, numberPosition.Y, expString);
         }
         private void RenderCharacterPhysicalSkills() {
-            var character = Characters[SelectedCharacterIndex];
+            var character = CharacterList.Selected;
 
             var labelPosition = UiLayout.GetPoint("fitnessLabel");
             var valuePosition = UiLayout.GetPoint("fitnessValue");
@@ -132,7 +132,7 @@ namespace Emergence.Scenes.Personnel {
             RenderSkill(Skill.Stealth, labelPosition, valuePosition);
         }
         private void RenderCharacterMentalSkills() {
-            var character = Characters[SelectedCharacterIndex];
+            var character = CharacterList.Selected;
 
             var labelPosition = UiLayout.GetPoint("mentalAcuityLabel");
             var valuePosition = UiLayout.GetPoint("mentalAcuityValue");
@@ -199,22 +199,22 @@ namespace Emergence.Scenes.Personnel {
             var name = attributeCategory.GetCategoryStatName();
             TCODConsole.root.print(labelPosition.X, labelPosition.Y, name);
             var value = attributeCategory == AttributeCategory.Physical 
-                ? Characters[SelectedCharacterIndex].Fitness
-                : Characters[SelectedCharacterIndex].MentalAcuity;
+                ? CharacterList.Selected.Fitness
+                : CharacterList.Selected.MentalAcuity;
             var x = value >= 10 ? valuePosition.X - 1 : valuePosition.X;
             TCODConsole.root.print(x, valuePosition.Y, value.ToString());
         }
         private void RenderAttribute(Attribute attribute, Point labelPosition, Point valuePosition) {
             var name = attribute.GetName();
             TCODConsole.root.print(labelPosition.X, labelPosition.Y, name);
-            var value = Characters[SelectedCharacterIndex].Attributes[attribute];
+            var value = CharacterList.Selected.Attributes[attribute];
             var x = value >= 10 ? valuePosition.X - 1 : valuePosition.X;
             TCODConsole.root.print(x, valuePosition.Y, value.ToString());
         }
         private void RenderSkill(Skill skill, Point labelPosition, Point valuePosition) {
             var name = skill.GetName();
             TCODConsole.root.print(labelPosition.X, labelPosition.Y, name);
-            var value = Characters[SelectedCharacterIndex].Skills[skill].ToString();
+            var value = CharacterList.Selected.Skills[skill].ToString();
             TCODConsole.root.print(valuePosition.X, valuePosition.Y, value);
         }
 

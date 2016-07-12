@@ -69,15 +69,19 @@ namespace Emergence.Ui {
 		public void RenderScrollBar(Point position, int height) {
 			var renderOffset = new Point(position);
 			if(CurrentPage == 0) {
-				// render top arrow, dull, at renderOffset
-			} else {
-				// render top arrow, bright, at renderOffset
-			}
+                TCODConsole.root.setForegroundColor(TCODColor.grey);
+                TCODConsole.root.putChar(renderOffset.X, renderOffset.Y, (char)TCODSpecialCharacter.ArrowNorthNoTail);
+            } else {
+                TCODConsole.root.setForegroundColor(TCODColor.white);
+                TCODConsole.root.putChar(renderOffset.X, renderOffset.Y, (char)TCODSpecialCharacter.ArrowNorthNoTail);
+            }
 			if(CurrentPage == NumberOfPages - 1) {
-				// render bottom arrow, dull, at renderOffset + height + 1
-			} else {
-				// render bottom arrow, bright, at renderOffset + height + 1
-			}
+                TCODConsole.root.setForegroundColor(TCODColor.grey);
+                TCODConsole.root.putChar(renderOffset.X, renderOffset.Y + height - 1, (char)TCODSpecialCharacter.ArrowSouthNoTail);
+            } else {
+                TCODConsole.root.setForegroundColor(TCODColor.white);
+                TCODConsole.root.putChar(renderOffset.X, renderOffset.Y + height - 1, (char)TCODSpecialCharacter.ArrowSouthNoTail);
+            }
 			height -= 2;
 			var barSize = height / NumberOfPages;
 			var barOffset = barSize * CurrentPage;
@@ -85,9 +89,11 @@ namespace Emergence.Ui {
 			for(int i = 0; i < height; ++i) {
 				// Check if we're in the bar range, or if this is the end of the bar and the last page (to handle odd bar sizes)
 				if((i >= barOffset && i < barOffset + barSize) || (i == height - 1 && CurrentPage == NumberOfPages - 1)) {
-                    TCODConsole.root.print(renderOffset.X, renderOffset.Y + i + 1, "#");
+                    TCODConsole.root.setForegroundColor(TCODColor.white);
+                    TCODConsole.root.putChar(renderOffset.X, renderOffset.Y + i + 1, (char)219);
 				} else {
-                    TCODConsole.root.print(renderOffset.X, renderOffset.Y + i + 1, "|");
+                    TCODConsole.root.setForegroundColor(TCODColor.grey);
+                    TCODConsole.root.putChar(renderOffset.X, renderOffset.Y + i + 1, (char)219);
                 }
 			}
 		}

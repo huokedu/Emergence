@@ -9,7 +9,7 @@ namespace Emergence.Scenes.Personnel {
         BaseScene PreviousScene { get; set; }
         List<Character> Characters { get; set; }
         Ui.UiLayout UiLayout { get; set; }
-        UI.UiList<Character> CharacterList { get; set; }
+        Ui.UiList<Character> CharacterList { get; set; }
 
         public PersonnelWoundsScene(Game game, BaseScene previousScene, List<Character> characters, int selected = 0) : base(game) {
             PreviousScene = previousScene;
@@ -63,19 +63,19 @@ namespace Emergence.Scenes.Personnel {
                 $"Personnel {(char)TCODSpecialCharacter.ArrowSouth}/{(char)TCODSpecialCharacter.ArrowNorth}");
         }
         private void RenderCharacterListItem(Point point, Character character, bool isSelected) {
-            var characterName = Characters[currentCharacterIndex].Name.ToString("{f}. {L}");
+            var characterName = character.Name.ToString("{f}. {L}");
             if(isSelected) {
                 TCODConsole.root.setForegroundColor(TCODColor.white);
                 TCODConsole.root.putChar(point.X, point.Y, (char)TCODSpecialCharacter.ArrowEast);
                 TCODConsole.root.putChar(point.X + characterName.Length + 1, point.Y, (char)TCODSpecialCharacter.ArrowWest);
             } else {
-                TCODConsole.root.setForegroundColor(TCODColor.gray);
+                TCODConsole.root.setForegroundColor(TCODColor.grey);
             }
             TCODConsole.root.print(point.X + 1, point.Y, characterName);
         }
         private void RenderCharacterName() {
             var position = UiLayout.GetPoint("characterName");
-            var characterName = Characters[SelectedCharacterIndex].Name.ToString("{F} {N}{?}{L}");
+            var characterName = CharacterList.Selected.Name.ToString("{F} {N}{?}{L}");
             TCODConsole.root.setForegroundColor(TCODColor.white);
             TCODConsole.root.printEx(position.X, position.Y,
                 TCODBackgroundFlag.Set, TCODAlignment.CenterAlignment, characterName);
