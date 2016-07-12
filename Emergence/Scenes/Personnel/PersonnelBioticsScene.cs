@@ -8,14 +8,15 @@ namespace Emergence.Scenes.Personnel {
     public class PersonnelBioticsScene : BaseScene {
         BaseScene PreviousScene { get; set; }
         List<Character> Characters { get; set; }
-        int SelectedCharacterIndex { get; set; }
         Ui.UiLayout UiLayout { get; set; }
+        UI.UiList<Character> CharacterList { get; set; }
 
         public PersonnelBioticsScene(Game game, BaseScene previousScene, List<Character> characters, int selected = 0) : base(game) {
             PreviousScene = previousScene;
             Characters = characters;
             UiLayout = Ui.UiLayout.Load("Assets/Layouts/CharacterScreenBiotics.ui");
-            SelectedCharacterIndex = selected;
+            CharacterList = new Ui.UiList<Character>(Characters, RenderCharacterListItem);
+            CharacterList.SelectedIndex = selected;
         }
 
         public override void Render(float deltaTime) {
@@ -56,31 +57,26 @@ namespace Emergence.Scenes.Personnel {
 
         private void RenderCharacterList() {
             var offset = UiLayout.GetPoint("characterList");
-            var start = System.Math.Max(0, SelectedCharacterIndex - 9);
-            for(int i = 0; i < 10; ++i) {
-                var currentCharacterIndex = start + i;
-                if(currentCharacterIndex >= Characters.Count) {
-                    break;
-                }
-                var characterName = Characters[currentCharacterIndex].Name.ToString("{f}. {L}");
-
-                if(currentCharacterIndex == SelectedCharacterIndex) {
-                    TCODConsole.root.setForegroundColor(TCODColor.white);
-                    TCODConsole.root.putChar(offset.X - 1, offset.Y + i * 2,
-                        (char)TCODSpecialCharacter.ArrowEast);
-                    TCODConsole.root.putChar(offset.X + characterName.Length, offset.Y + i * 2,
-                        (char)TCODSpecialCharacter.ArrowWest);
-                } else {
-                    TCODConsole.root.setForegroundColor(TCODColor.grey);
-                }
-
-                TCODConsole.root.print(offset.X, offset.Y + i * 2, characterName);
-            }
+            CharacterList.Render(offset);
+            
+            offset = UiLayout.GetPoint("scrollBarTop");
+            CharacterList.RenderScrollBar(offset, 21);
 
             offset = UiLayout.GetPoint("personnelTab");
             TCODConsole.root.setForegroundColor(TCODColor.white);
             TCODConsole.root.print(offset.X, offset.Y, 
                 $"Personnel {(char)TCODSpecialCharacter.ArrowSouth}/{(char)TCODSpecialCharacter.ArrowNorth}");
+        }
+        private void RenderCharacterListItem(Point point, Character character, bool isSelected) {
+            var characterName = Characters[currentCharacterIndex].Name.ToString("{f}. {L}");
+            if(isSelected) {
+                TCODConsole.root.setForegroundColor(TCODColor.white);
+                TCODConsole.root.putChar(point.X, point.Y, (char)TCODSpecialCharacter.ArrowEast);
+                TCODConsole.root.putChar(point.X + characterName.Length + 1, point.Y, (char)TCODSpecialCharacter.ArrowWest);
+            } else {
+                TCODConsole.root.setForegroundColor(TCODColor.gray);
+            }
+            TCODConsole.root.print(point.X + 1, point.Y, characterName);
         }
         private void RenderCharacterName() {
             var position = UiLayout.GetPoint("characterName");
