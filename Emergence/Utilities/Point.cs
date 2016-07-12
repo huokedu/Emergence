@@ -7,5 +7,10 @@
             X = x;
             Y = y;
         }
+
+        public Point(Point point) {
+            X = point.X;
+            Y = point.Y;
+        }
     }
 }

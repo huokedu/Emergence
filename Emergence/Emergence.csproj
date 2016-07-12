@@ -81,6 +81,7 @@
     <Compile Include="UI\BlockingConfirmationModal.cs" />
     <Compile Include="UI\BlockingMessageModal.cs" />
     <Compile Include="UI\UiLayout.cs" />
+    <Compile Include="UI\UiList.cs" />
     <Compile Include="Utilities\AutoTiler.cs" />
     <Compile Include="Utilities\EnumExtensions.cs" />
     <Compile Include="Utilities\NameGenerator.cs" />

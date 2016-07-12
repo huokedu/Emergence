@@ -19,7 +19,7 @@ namespace Emergence.Scenes.MainMenu {
 			creditsDoneRendering = false;
 			GenerateStarfield();
 			GenerateClouds();
-		}
+        }
 
 		public override void Update(float deltaTime) {
 			starfield.ForEach(s => s.Update(deltaTime));

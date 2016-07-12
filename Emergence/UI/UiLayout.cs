@@ -17,7 +17,7 @@ namespace Emergence.Ui {
             for(int x = 0; x < width; ++x) {
                 for(int y = 0; y < height; ++y) {
                     if(glyphs[x, y] != ' ') {
-                        TCODConsole.root.putChar(x, y, glyphs[x, y]);
+                        TCODConsole.root.putChar(x + xOffset, y + yOffset, glyphs[x, y]);
                     }
                 }
             }

@@ -7,8 +7,8 @@ using libtcod;
 namespace Emergence.Ui {
 	public class UiList<T> {
 		private List<T> Options { get; set; }
-		private Action<Point, T, bool> Render { get; set; }
-		private selectedIndex { get; set; }
+		private Action<Point, T, bool> RenderMethod { get; set; }
+		private int selectedIndex { get; set; }
 		
 		public int SelectedIndex { 
 			get {
@@ -48,9 +48,9 @@ namespace Emergence.Ui {
 			}
 		}
 		
-		public UiList<T>(List<T> options, Action<Point, T, bool> render) {
+		public UiList(List<T> options, Action<Point, T, bool> renderMethod) {
 			Options = options;
-			Render = render;
+			RenderMethod = renderMethod;
 			SelectedIndex = 0;
 			VerticalSpacing = 2;
 			PageSize = 10;
@@ -60,8 +60,8 @@ namespace Emergence.Ui {
 			var indexOffset = CurrentPage * PageSize;
 			var renderOffset = new Point(position);
 			for(int i = 0; i < PageSize; ++i) {
-				if(i >= Options.Count) { break; }
-				Render(renderOffset, Options[i + indexOffset], SelectedIndex == i + indexOffset);
+				if(i + indexOffset >= Options.Count) { break; }
+				RenderMethod(renderOffset, Options[i + indexOffset], SelectedIndex == i + indexOffset);
 				renderOffset.Y += VerticalSpacing;
 			}
 		}
@@ -85,10 +85,10 @@ namespace Emergence.Ui {
 			for(int i = 0; i < height; ++i) {
 				// Check if we're in the bar range, or if this is the end of the bar and the last page (to handle odd bar sizes)
 				if((i >= barOffset && i < barOffset + barSize) || (i == height - 1 && CurrentPage == NumberOfPages - 1)) {
-					// render bar filled in at renderOffset + i + 1
+                    TCODConsole.root.print(renderOffset.X, renderOffset.Y + i + 1, "#");
 				} else {
-					// render bar not filled in at renderOffset + i + 1
-				}
+                    TCODConsole.root.print(renderOffset.X, renderOffset.Y + i + 1, "|");
+                }
 			}
 		}
 	}
