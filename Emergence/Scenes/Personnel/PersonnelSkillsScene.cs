@@ -8,14 +8,15 @@ namespace Emergence.Scenes.Personnel {
     public class PersonnelSkillsScene : BaseScene {
         BaseScene PreviousScene { get; set; }
         List<Character> Characters { get; set; }
-        int SelectedCharacterIndex { get; set; }
         Ui.UiLayout UiLayout { get; set; }
+        UI.UiList<Character> CharacterList { get; set; }
 
         public PersonnelSkillsScene(Game game, BaseScene previousScene, List<Character> characters, int selected = 0) : base(game) {
             PreviousScene = previousScene;
             Characters = characters;
             UiLayout = Ui.UiLayout.Load("Assets/Layouts/CharacterScreenSkills.ui");
-            SelectedCharacterIndex = selected;
+            CharacterList = new Ui.UiList<Character>(Characters, RenderCharacterListItem);
+            CharacterList.SelectedIndex = selected;
         }
 
         public override void Render(float deltaTime) {
@@ -37,53 +38,42 @@ namespace Emergence.Scenes.Personnel {
         }
         public override void KeyPressed(TCODKey keyData) {
             if(keyData.KeyCode == TCODKeyCode.Up) {
-                SelectedCharacterIndex -= 1;
-                if(SelectedCharacterIndex < 0) {
-                    SelectedCharacterIndex = Characters.Count - 1;
-                }
+                CharacterList.SelectedIndex -= 1;
             } else if(keyData.KeyCode == TCODKeyCode.Down) {
-                SelectedCharacterIndex += 1;
-                if(SelectedCharacterIndex == Characters.Count) {
-                    SelectedCharacterIndex = 0;
-                }
+                CharacterList.SelectedIndex += 1;
             } else if(keyData.KeyCode == TCODKeyCode.Escape) {
                 Game.ChangeScene(PreviousScene);
             } else if(keyData.KeyCode == TCODKeyCode.Tab) {
                 if(!keyData.Shift) {
-                    Game.ChangeScene(new PersonnelWoundsScene(Game, PreviousScene, Characters, SelectedCharacterIndex));
+                    Game.ChangeScene(new PersonnelWoundsScene(Game, PreviousScene, Characters, CharacterList.SelectedIndex));
                 } else {
-                    Game.ChangeScene(new PersonnelBioticsScene(Game, PreviousScene, Characters, SelectedCharacterIndex));
+                    Game.ChangeScene(new PersonnelBioticsScene(Game, PreviousScene, Characters, CharacterList.SelectedIndex));
                 }
             }
         }
 
         private void RenderCharacterList() {
             var offset = UiLayout.GetPoint("characterList");
-            var start = System.Math.Max(0, SelectedCharacterIndex - 9);
-            for(int i = 0; i < 10; ++i) {
-                var currentCharacterIndex = start + i;
-                if(currentCharacterIndex >= Characters.Count) {
-                    break;
-                }
-                var characterName = Characters[currentCharacterIndex].Name.ToString("{f}. {L}");
-
-                if(currentCharacterIndex == SelectedCharacterIndex) {
-                    TCODConsole.root.setForegroundColor(TCODColor.white);
-                    TCODConsole.root.putChar(offset.X - 1, offset.Y + i * 2,
-                        (char)TCODSpecialCharacter.ArrowEast);
-                    TCODConsole.root.putChar(offset.X + characterName.Length, offset.Y + i * 2,
-                        (char)TCODSpecialCharacter.ArrowWest);
-                } else {
-                    TCODConsole.root.setForegroundColor(TCODColor.grey);
-                }
-
-                TCODConsole.root.print(offset.X, offset.Y + i * 2, characterName);
-            }
+            CharacterList.Render(offset);
+            
+            offset = UiLayout.GetPoint("scrollBarTop");
+            CharacterList.RenderScrollBar(offset, 21);
 
             offset = UiLayout.GetPoint("personnelTab");
             TCODConsole.root.setForegroundColor(TCODColor.white);
             TCODConsole.root.print(offset.X, offset.Y, 
                 $"Personnel {(char)TCODSpecialCharacter.ArrowSouth}/{(char)TCODSpecialCharacter.ArrowNorth}");
+        }
+        private void RenderCharacterListItem(Point point, Character character, bool isSelected) {
+            var characterName = Characters[currentCharacterIndex].Name.ToString("{f}. {L}");
+            if(isSelected) {
+                TCODConsole.root.setForegroundColor(TCODColor.white);
+                TCODConsole.root.putChar(point.X, point.Y, (char)TCODSpecialCharacter.ArrowEast);
+                TCODConsole.root.putChar(point.X + characterName.Length + 1, point.Y, (char)TCODSpecialCharacter.ArrowWest);
+            } else {
+                TCODConsole.root.setForegroundColor(TCODColor.gray);
+            }
+            TCODConsole.root.print(point.X + 1, point.Y, characterName);
         }
         private void RenderCharacterName() {
             var position = UiLayout.GetPoint("characterName");
