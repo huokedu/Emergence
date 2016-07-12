@@ -35,22 +35,16 @@ namespace Emergence.Scenes.Personnel {
         }
         public override void KeyPressed(TCODKey keyData) {
             if(keyData.KeyCode == TCODKeyCode.Up) {
-                SelectedCharacterIndex -= 1;
-                if(SelectedCharacterIndex < 0) {
-                    SelectedCharacterIndex = Characters.Count - 1;
-                }
+                CharacterList.SelectedIndex -= 1;
             } else if(keyData.KeyCode == TCODKeyCode.Down) {
-                SelectedCharacterIndex += 1;
-                if(SelectedCharacterIndex == Characters.Count) {
-                    SelectedCharacterIndex = 0;
-                }
+                CharacterList.SelectedIndex += 1;
             } else if(keyData.KeyCode == TCODKeyCode.Escape) {
                 Game.ChangeScene(PreviousScene);
             } else if(keyData.KeyCode == TCODKeyCode.Tab) {
                 if(!keyData.Shift) {
-                    Game.ChangeScene(new PersonnelSkillsScene(Game, PreviousScene, Characters, SelectedCharacterIndex));
+                    Game.ChangeScene(new PersonnelSkillsScene(Game, PreviousScene, Characters, CharacterList.SelectedIndex));
                 } else {
-                    Game.ChangeScene(new PersonnelWoundsScene(Game, PreviousScene, Characters, SelectedCharacterIndex));
+                    Game.ChangeScene(new PersonnelWoundsScene(Game, PreviousScene, Characters, CharacterList.SelectedIndex));
                 }
             }
         }
