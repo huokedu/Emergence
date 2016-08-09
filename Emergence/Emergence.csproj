@@ -64,15 +64,20 @@
     <Compile Include="Entities\Character\CharacterFactory.cs" />
     <Compile Include="Entities\Character\Skill.cs" />
     <Compile Include="Entities\Character\SkillRank.cs" />
+    <Compile Include="Entities\ExcursionMap\ExcursionMap.cs" />
+    <Compile Include="Entities\HomeBase\HomeBase.cs" />
+    <Compile Include="Entities\HomeBase\Room.cs" />
+    <Compile Include="Entities\HomeBase\RoomType.cs" />
     <Compile Include="Entities\SupplyType.cs" />
     <Compile Include="Scenes\BaseScene.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\CreditsScene.cs" />
-    <Compile Include="Scenes\HomeBase\HomeBaseScene.cs" />
+    <Compile Include="Scenes\HomeBaseScene.cs" />
     <Compile Include="Scenes\MainMenu\Cloud.cs" />
     <Compile Include="Scenes\MainMenu\MainMenuScene.cs" />
     <Compile Include="Scenes\MainMenu\Star.cs" />
+    <Compile Include="Scenes\MapGenTestScene.cs" />
     <Compile Include="Scenes\NewGameScene.cs" />
     <Compile Include="Scenes\Personnel\PersonnelBioticsScene.cs" />
     <Compile Include="Scenes\Personnel\PersonnelWoundsScene.cs" />
@@ -83,10 +88,13 @@
     <Compile Include="UI\UiLayout.cs" />
     <Compile Include="UI\UiList.cs" />
     <Compile Include="Utilities\AutoTiler.cs" />
+    <Compile Include="Utilities\Direction.cs" />
     <Compile Include="Utilities\EnumExtensions.cs" />
     <Compile Include="Utilities\NameGenerator.cs" />
     <Compile Include="Utilities\Point.cs" />
+    <Compile Include="Utilities\Rectangle.cs" />
     <Compile Include="Utilities\RexPaintImageLoader.cs" />
+    <Compile Include="Utilities\TCODConsoleExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

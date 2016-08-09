@@ -66,6 +66,7 @@ namespace Emergence.Scenes.MainMenu {
 				case 'L':
 					new BlockingMessageModal(Game.Settings.UiForeground,
 						Game.Settings.UiBackground, "This feature is not yet implemented.").Show();
+                    Game.ChangeScene(new MapGenTestScene(Game));
 					break;
 
 				case 'O':

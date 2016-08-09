@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Emergence.Core;
 using Emergence.Entities.Character;
-using Emergence.Scenes.HomeBase;
 using Emergence.Ui;
 using Emergence.Utilities;
 using libtcod;
@@ -35,9 +34,6 @@ namespace Emergence.Scenes {
                     Background = Game.Settings.UiBackground,
                     Message = "Are you sure you want to start with these characters?"
                 }.Show()) {
-                    for(int i = 0; i < 22; ++i) {
-                        Game.State.Personnel.Add(Game.State.Personnel[0]);
-                    }
                     Game.ChangeScene(new HomeBaseScene(Game));
                 }
             } else if (char.ToUpper(keyData.Character) == 'R') {

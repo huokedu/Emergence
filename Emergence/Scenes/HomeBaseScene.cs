@@ -1,14 +1,16 @@
 ﻿using System;
 using Emergence.Core;
 using Emergence.Entities;
+using Emergence.Entities.HomeBase;
 using Emergence.Scenes.MainMenu;
 using Emergence.Scenes.Personnel;
 using Emergence.Ui;
 using Emergence.Utilities;
 using libtcod;
 
-namespace Emergence.Scenes.HomeBase {
+namespace Emergence.Scenes {
 	public class HomeBaseScene : BaseScene {
+        private HomeBase homeBase;
 		private TCODConsole baseImage;
 		private TCODConsole labels;
 		private int x, y;
@@ -16,7 +18,21 @@ namespace Emergence.Scenes.HomeBase {
 
 		public HomeBaseScene(Game game) : base(game) {
 			roomLabelsEnabled = false;
-			baseImage = RexPaintImageLoader
+
+            homeBase = new HomeBase(25, 25);
+            homeBase.Rooms[1, 2] = new Room(RoomType.Kitchen);
+            homeBase.Rooms[2, 2] = new Room(RoomType.Kitchen);
+            homeBase.Rooms[3, 2] = new Room(RoomType.Gym);
+            homeBase.Rooms[2, 1] = new Room(RoomType.FiringRange);
+            homeBase.Rooms[2, 3] = new Room(RoomType.Generator);
+
+            homeBase.Rooms[1, 2].AddExit(Direction.East, homeBase.Rooms[2, 2]);
+            homeBase.Rooms[3, 2].AddExit(Direction.West, homeBase.Rooms[2, 2]);
+            homeBase.Rooms[2, 1].AddExit(Direction.South, homeBase.Rooms[2, 2]);
+            homeBase.Rooms[2, 3].AddExit(Direction.North, homeBase.Rooms[2, 2]);
+
+
+            baseImage = RexPaintImageLoader
 				.LoadImage("Assets/HomeBase/base.xp");
 			labels = RexPaintImageLoader
 				.LoadImage("Assets/HomeBase/labels.xp");
@@ -26,12 +42,7 @@ namespace Emergence.Scenes.HomeBase {
 		public override void Render(float deltaTime) {
 			TCODConsole.root.setBackgroundColor(TCODColor.black);
 			TCODConsole.root.clear();
-			TCODConsole.blit(baseImage, 0, 0, 60, 60,
-				TCODConsole.root, x, y);
-			if (roomLabelsEnabled) {
-				TCODConsole.blit(labels, 0, 0, 60, 60,
-					TCODConsole.root, x, y);
-			}
+            homeBase.Render(x, y, roomLabelsEnabled);
 			RenderMainPanel();
 		}
 
