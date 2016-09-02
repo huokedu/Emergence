@@ -89,14 +89,7 @@ namespace Emergence.Scenes {
 						"This feature is not yet implemented."
 					).Show();
 					break;
-				case 'T': // New [T]ask
-					new BlockingMessageModal(
-						Game.Settings.UiForeground,
-						Game.Settings.UiBackground,
-						"This feature is not yet implemented."
-					).Show();
-					break;
-				case 'A': // [A]ssign Personnel
+				case 'T': // [T]ask Board
 					new BlockingMessageModal(
 						Game.Settings.UiForeground,
 						Game.Settings.UiBackground,
@@ -221,7 +214,7 @@ namespace Emergence.Scenes {
             TCODConsole.root.print(23, 2, $"[E]quipment");
             TCODConsole.root.print(23, 3, $"[V]ehicles");
             TCODConsole.root.print(23, 5, $"[Enter] Select Room");
-            TCODConsole.root.print(23, 6, $"        To Create Task");
+            TCODConsole.root.print(23, 6, $"[T]ask Board");
             TCODConsole.root.print(23, 8, $"[G]o Scavenging");
 
             // Draw right menu options
