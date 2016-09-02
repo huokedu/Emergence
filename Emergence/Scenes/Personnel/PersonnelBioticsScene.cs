@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Emergence.Core;
-using Emergence.Entities.Character;
+using Emergence.Entities.Personnel;
 using Emergence.Utilities;
 using libtcod;
 

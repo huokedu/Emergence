@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Emergence.Entities.Character {
+namespace Emergence.Entities.Personnel {
 	public class Character {
 		public Name Name { get; set; }
         public Gender Gender { get; set; }

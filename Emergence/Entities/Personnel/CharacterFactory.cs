@@ -1,7 +1,7 @@
 ﻿using System;
 using Emergence.Utilities;
 
-namespace Emergence.Entities.Character {
+namespace Emergence.Entities.Personnel {
     public static class CharacterFactory {
         public static Character GenerateRandom(Random random) {
             var gender = random.Next(2) == 1 ? Gender.Male : Gender.Female;

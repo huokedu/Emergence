@@ -1,7 +1,7 @@
 ﻿using System;
 using Emergence.Core;
 
-namespace Emergence.Entities.Character {
+namespace Emergence.Entities.Personnel {
 	public enum Skill {
 		LargeMeleeWeapons,
 		ThrownWeapons,

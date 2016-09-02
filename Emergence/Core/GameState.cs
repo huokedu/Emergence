@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emergence.Entities;
-using Emergence.Entities.Character;
+using Emergence.Entities.Personnel;
 
 namespace Emergence.Core {
     public class GameState {

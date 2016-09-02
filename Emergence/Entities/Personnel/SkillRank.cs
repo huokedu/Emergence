@@ -1,4 +1,4 @@
-﻿namespace Emergence.Entities.Character {
+﻿namespace Emergence.Entities.Personnel {
 	public enum SkillRank {
 		F,
 		E,

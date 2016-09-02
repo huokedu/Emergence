@@ -59,11 +59,11 @@
     <Compile Include="Core\GameState.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\SettingsContract.cs" />
-    <Compile Include="Entities\Character\Attribute.cs" />
-    <Compile Include="Entities\Character\Character.cs" />
-    <Compile Include="Entities\Character\CharacterFactory.cs" />
-    <Compile Include="Entities\Character\Skill.cs" />
-    <Compile Include="Entities\Character\SkillRank.cs" />
+    <Compile Include="Entities\Personnel\Attribute.cs" />
+    <Compile Include="Entities\Personnel\Character.cs" />
+    <Compile Include="Entities\Personnel\CharacterFactory.cs" />
+    <Compile Include="Entities\Personnel\Skill.cs" />
+    <Compile Include="Entities\Personnel\SkillRank.cs" />
     <Compile Include="Entities\ExcursionMap\ExcursionMap.cs" />
     <Compile Include="Entities\HomeBase\HomeBase.cs" />
     <Compile Include="Entities\HomeBase\Room.cs" />

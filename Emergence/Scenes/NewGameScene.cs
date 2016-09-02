@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emergence.Core;
-using Emergence.Entities.Character;
+using Emergence.Entities.Personnel;
 using Emergence.Ui;
-using Emergence.Utilities;
 using libtcod;
 
 namespace Emergence.Scenes {
