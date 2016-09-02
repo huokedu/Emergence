@@ -10,6 +10,14 @@ namespace Emergence.Entities.HomeBase {
         public int Width { get { return Rooms.GetLength(0); } }
         public int Height { get { return Rooms.GetLength(1); } }
 
+        private static Tasks.BaseTask[] AllTasks { get; } =
+            new Tasks.BaseTask[] {
+                new Tasks.AddDoor(null),
+                new Tasks.ClearRoom(null),
+                new Tasks.DigNewRoom(null),
+                new Tasks.RepurposeRoom(null)
+            };
+
         public HomeBase(int width, int height) {
             Rooms = new Room[width, height];
         }
@@ -25,6 +33,17 @@ namespace Emergence.Entities.HomeBase {
                     }
                 }
             }
+        }
+
+        public List<Tasks.BaseTask> GetValidTasks(int x, int y) {
+            var room = Rooms[x, y];
+            var tasks = new List<Tasks.BaseTask>();
+            foreach(var task in AllTasks) {
+                if(task.IsValid(this, x, y)) {
+                    tasks.Add(task.Clone());
+                }
+            }
+            return tasks;
         }
     }
 }
