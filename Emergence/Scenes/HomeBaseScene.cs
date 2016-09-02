@@ -13,14 +13,15 @@ namespace Emergence.Scenes {
         private HomeBase homeBase;
 		private TCODConsole baseImage;
 		private TCODConsole labels;
-		private int x, y;
+        private int roomSelectionX, roomSelectionY;
+		private int cameraX, cameraY;
 		private bool roomLabelsEnabled;
 
 		public HomeBaseScene(Game game) : base(game) {
 			roomLabelsEnabled = false;
 
             homeBase = new HomeBase(25, 25);
-            homeBase.Rooms[1, 2] = new Room(RoomType.Kitchen);
+            homeBase.Rooms[1, 2] = new Room(RoomType.LivingQuarters);
             homeBase.Rooms[2, 2] = new Room(RoomType.Kitchen);
             homeBase.Rooms[3, 2] = new Room(RoomType.Gym);
             homeBase.Rooms[2, 1] = new Room(RoomType.FiringRange);
@@ -36,34 +37,40 @@ namespace Emergence.Scenes {
 				.LoadImage("Assets/HomeBase/base.xp");
 			labels = RexPaintImageLoader
 				.LoadImage("Assets/HomeBase/labels.xp");
-			x = y = 0;
+			cameraX = cameraY = 0;
+            roomSelectionX = 1;
+            roomSelectionY = 1;
+            MoveRoomSelection(0, 0);
 		}
 
 		public override void Render(float deltaTime) {
 			TCODConsole.root.setBackgroundColor(TCODColor.black);
 			TCODConsole.root.clear();
-            homeBase.Render(x, y, roomLabelsEnabled);
+            homeBase.Render(-cameraX, -cameraY, roomLabelsEnabled);
+            RenderRoomSelection();
 			RenderMainPanel();
 		}
-
 		public override void Update(float deltaTime) {
 		}
-
 		public override void KeyPressed(TCODKey keyData) {
 			switch(keyData.KeyCode) {
 				case TCODKeyCode.Up:
-					++y;
+					MoveRoomSelection(0, -1);
 					break;
 				case TCODKeyCode.Down:
-					--y;
-					break;
+                    MoveRoomSelection(0, 1);
+                    break;
 				case TCODKeyCode.Left:
-					++x;
-					break;
+                    MoveRoomSelection(-1, 0);
+                    break;
 				case TCODKeyCode.Right:
-					--x;
-					break;
+                    MoveRoomSelection(1, 0);
+                    break;
 			}
+            if(keyData.KeyCode == TCODKeyCode.Enter) {
+                SelectRoom();
+                return;
+            }
 			switch(char.ToUpper(keyData.Character)) {
 				case 'P': // [P]ersonnel
                     Game.ChangeScene(new PersonnelSkillsScene(Game, this, Game.State.Personnel));
@@ -141,66 +148,105 @@ namespace Emergence.Scenes {
 			}
 		}
 
-		private void RenderMainPanel() {
-			// Set colors and clear the area
-			TCODConsole.root.setForegroundColor(Game.Settings.UiForeground);
-			TCODConsole.root.setBackgroundColor(Game.Settings.UiBackground);
-			TCODConsole.root.setBackgroundFlag(TCODBackgroundFlag.Set);
-			TCODConsole.root.rect(2, 0, TCODConsole.root.getWidth() - 4, 10, true);
+        private void MoveRoomSelection(int deltaX, int deltaY) {
+            roomSelectionX += deltaX;
+            roomSelectionY += deltaY;
+            if(roomSelectionX < 0) roomSelectionX = 0;
+            if(roomSelectionX >= homeBase.Width)
+                roomSelectionX = homeBase.Width - 1;
+            if(roomSelectionY < 0) roomSelectionY = 0;
+            if(roomSelectionY >= homeBase.Height)
+                roomSelectionY = homeBase.Height - 1;
+            
+            // Update camera to loosely follow the room selection
+            var roomScreenX = (roomSelectionX * 11) - cameraX;
+            var roomScreenY = (roomSelectionY * 11) - cameraY;
 
-			// Draw the frame
-			TCODConsole.root.vline(1, 0, 10);
-			TCODConsole.root.vline(21, 0, 10);
-			TCODConsole.root.vline(TCODConsole.root.getWidth() - 2, 0, 10);
-			TCODConsole.root.hline(2, 10, TCODConsole.root.getWidth() - 4);
-			TCODConsole.root.putChar(1, 10, (int)TCODSpecialCharacter.SW);
-			TCODConsole.root.putChar(21, 10, (int)TCODSpecialCharacter.TeeNorth);
-			TCODConsole.root.putChar(TCODConsole.root.getWidth() - 2, 10, (int)TCODSpecialCharacter.SE);
+            if(roomScreenX < Game.Settings.ScreenWidth / 4) {
+                cameraX -= (Game.Settings.ScreenWidth / 4) - roomScreenX;
+            } else if(roomScreenX + 11 > Game.Settings.ScreenWidth * 3 /4) {
+                cameraX += (roomScreenX + 11) - (Game.Settings.ScreenWidth * 3 / 4);
+            }
+            if(roomScreenY < Game.Settings.ScreenHeight / 4) {
+                cameraY -= (Game.Settings.ScreenHeight / 4) - roomScreenY;
+            } else if(roomScreenY + 11 > Game.Settings.ScreenHeight * 3 / 4) {
+                cameraY += (roomScreenY + 11) - (Game.Settings.ScreenHeight * 3 / 4);
+            }
+        }
+        private void RenderRoomSelection() {
+            int roomScreenX = (roomSelectionX * 11) - cameraX;
+            int roomScreenY = (roomSelectionY * 11) - cameraY;
+            TCODConsole.root.setForegroundColor(TCODColor.desaturatedGreen);
+            TCODConsole.root.printFrame(roomScreenX, roomScreenY, 11, 11, false, TCODBackgroundFlag.None);
+        }
+        private void SelectRoom() {
+            var room = homeBase.Rooms[roomSelectionX, roomSelectionY];
+            if(room == null) return;
+            new BlockingMessageModal(TCODColor.grey, TCODColor.black,
+                new string[] { "Selected Room", $"Room Type: {room.RoomType}" }
+                ).Show();
+        }
 
-			// Draw current stocks w/ labels
-			TCODConsole.root.print(3, 1, 
+        private void RenderMainPanel() {
+            // Set colors and clear the area
+            TCODConsole.root.setForegroundColor(Game.Settings.UiForeground);
+            TCODConsole.root.setBackgroundColor(Game.Settings.UiBackground);
+            TCODConsole.root.setBackgroundFlag(TCODBackgroundFlag.Set);
+            TCODConsole.root.rect(2, 0, TCODConsole.root.getWidth() - 4, 10, true);
+
+            // Draw the frame
+            TCODConsole.root.vline(1, 0, 10);
+            TCODConsole.root.vline(21, 0, 10);
+            TCODConsole.root.vline(TCODConsole.root.getWidth() - 2, 0, 10);
+            TCODConsole.root.hline(2, 10, TCODConsole.root.getWidth() - 4);
+            TCODConsole.root.putChar(1, 10, (int)TCODSpecialCharacter.SW);
+            TCODConsole.root.putChar(21, 10, (int)TCODSpecialCharacter.TeeNorth);
+            TCODConsole.root.putChar(TCODConsole.root.getWidth() - 2, 10, (int)TCODSpecialCharacter.SE);
+
+            // Draw current stocks w/ labels
+            TCODConsole.root.print(3, 1,
                 $"Population: {Game.State.Personnel.Count.ToString("D2")}/{Game.State.MaxPersonnel.ToString("D2")}");
             var supplyOffset = 3;
             foreach(var value in Enum.GetValues(typeof(SupplyType))) {
                 var supplyType = (SupplyType)value;
-                TCODConsole.root.print(3, supplyOffset, 
+                TCODConsole.root.print(3, supplyOffset,
                     $"{supplyType.GetShortName().PadRight(6)}: " +
-                    $"{Game.State.Supplies[supplyType].ToString("D4")}/" + 
+                    $"{Game.State.Supplies[supplyType].ToString("D4")}/" +
                     $"{Game.State.MaxSupplies[supplyType].ToString("D4")}");
                 supplyOffset += 1;
             }
 
-			// Draw left menu options
-			TCODConsole.root.print(23, 1, $"[P]ersonnel");
-			TCODConsole.root.print(23, 2, $"[E]quipment");
-			TCODConsole.root.print(23, 3, $"[V]ehicles");
-			TCODConsole.root.print(23, 5, $"New [T]ask");
-			TCODConsole.root.print(23, 6, $"[A]ssign Personnel");
-			TCODConsole.root.print(23, 8, $"[G]o Scavenging");
+            // Draw left menu options
+            TCODConsole.root.print(23, 1, $"[P]ersonnel");
+            TCODConsole.root.print(23, 2, $"[E]quipment");
+            TCODConsole.root.print(23, 3, $"[V]ehicles");
+            TCODConsole.root.print(23, 5, $"[Enter] Select Room");
+            TCODConsole.root.print(23, 6, $"        To Create Task");
+            TCODConsole.root.print(23, 8, $"[G]o Scavenging");
 
-			// Draw right menu options
-			int x = TCODConsole.root.getWidth() - 4;
-			string arrows = ""
-				+ (char)TCODSpecialCharacter.ArrowNorth
-				+ (char)TCODSpecialCharacter.ArrowSouth
-				+ (char)TCODSpecialCharacter.ArrowWest
-				+ (char)TCODSpecialCharacter.ArrowEast;
-			TCODConsole.root.setAlignment(TCODAlignment.RightAlignment);
-			// Arrows require special characters, and the color of the 
-			// room labels menu option changes to reflect when it is enabled.
-			TCODConsole.root.print(x, 1, $"[{arrows}] Move View");
-			if(roomLabelsEnabled) {
-				TCODConsole.root.setForegroundColor(TCODColor.green);
-			}
+            // Draw right menu options
+            int x = TCODConsole.root.getWidth() - 4;
+            string arrows = ""
+                + (char)TCODSpecialCharacter.ArrowNorth
+                + (char)TCODSpecialCharacter.ArrowSouth
+                + (char)TCODSpecialCharacter.ArrowWest
+                + (char)TCODSpecialCharacter.ArrowEast;
+            TCODConsole.root.setAlignment(TCODAlignment.RightAlignment);
+            // Arrows require special characters, and the color of the 
+            // room labels menu option changes to reflect when it is enabled.
+            TCODConsole.root.print(x, 1, $"[{arrows}] Move View");
+            if(roomLabelsEnabled) {
+                TCODConsole.root.setForegroundColor(TCODColor.green);
+            }
             TCODConsole.root.print(x, 2, $"[R]oom Labels");
-			TCODConsole.root.setForegroundColor(Game.Settings.UiForeground);
+            TCODConsole.root.setForegroundColor(Game.Settings.UiForeground);
 
-			TCODConsole.root.print(x, 3, $"Latest [S]ummary");
-			TCODConsole.root.print(x, 4, $"[W]ait a Day");
-			TCODConsole.root.print(x, 7, $"[O]ptions");
-			TCODConsole.root.print(x, 8, $"Save and [Q]uit");
+            TCODConsole.root.print(x, 3, $"Latest [S]ummary");
+            TCODConsole.root.print(x, 4, $"[W]ait a Day");
+            TCODConsole.root.print(x, 7, $"[O]ptions");
+            TCODConsole.root.print(x, 8, $"Save and [Q]uit");
 
-			TCODConsole.root.setAlignment(TCODAlignment.LeftAlignment);
-		}
-	}
+            TCODConsole.root.setAlignment(TCODAlignment.LeftAlignment);
+        }
+    }
 }
