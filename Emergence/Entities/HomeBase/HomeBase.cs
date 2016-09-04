@@ -36,14 +36,7 @@ namespace Emergence.Entities.HomeBase {
         }
 
         public List<Tasks.BaseTask> GetValidTasks(int x, int y) {
-            var room = Rooms[x, y];
-            var tasks = new List<Tasks.BaseTask>();
-            foreach(var task in AllTasks) {
-                if(task.IsValid(this, x, y)) {
-                    tasks.Add(task.Clone());
-                }
-            }
-            return tasks;
+            return AllTasks.Where(t => t.IsValid(this, x, y)).ToList();
         }
     }
 }

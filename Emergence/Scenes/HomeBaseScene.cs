@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Emergence.Core;
 using Emergence.Entities;
 using Emergence.Entities.HomeBase;
+using Emergence.Entities.HomeBase.Tasks;
 using Emergence.Scenes.MainMenu;
 using Emergence.Scenes.Personnel;
 using Emergence.Ui;
@@ -16,6 +19,7 @@ namespace Emergence.Scenes {
         private int roomSelectionX, roomSelectionY;
 		private int cameraX, cameraY;
 		private bool roomLabelsEnabled;
+        private List<BaseTask> tasks;
 
 		public HomeBaseScene(Game game) : base(game) {
 			roomLabelsEnabled = false;
@@ -41,6 +45,7 @@ namespace Emergence.Scenes {
             roomSelectionX = 1;
             roomSelectionY = 1;
             MoveRoomSelection(0, 0);
+            tasks = new List<BaseTask>();
 		}
 
 		public override void Render(float deltaTime) {
@@ -173,11 +178,42 @@ namespace Emergence.Scenes {
             TCODConsole.root.printFrame(roomScreenX, roomScreenY, 11, 11, false, TCODBackgroundFlag.None);
         }
         private void SelectRoom() {
+            BaseTask newTask;
             var room = homeBase.Rooms[roomSelectionX, roomSelectionY];
-            if(room == null) return;
-            new BlockingMessageModal(TCODColor.grey, TCODColor.black,
-                new string[] { "Selected Room", $"Room Type: {room.RoomType}" }
-                ).Show();
+
+            var validTasks = homeBase.GetValidTasks(roomSelectionX, roomSelectionY);
+            if(validTasks == null || validTasks.Count == 0) return;
+            var validTaskNames = validTasks.Select(t => t.Title).ToArray();
+
+            var selectedTaskName = new BlockingOptionModal() {
+                Foreground = TCODColor.grey,
+                Background = TCODColor.black,
+                Message = room.RoomType.GetName(),
+                Options = validTaskNames
+            }.Show();
+            var selectedTask = validTasks.FirstOrDefault(t => t.Title == selectedTaskName);
+            if(selectedTask == null) return;
+
+            var options = selectedTask.GetOptions(homeBase, roomSelectionX, roomSelectionY);
+            if(options == null || options.Length == 0) {
+                newTask = selectedTask.Clone();
+                newTask.Room = room;
+                newTask.SelectedOption = null;
+                tasks.Add(newTask);
+                return;
+            }
+
+            var selectedOption = new BlockingOptionModal() {
+                Foreground = TCODColor.grey,
+                Background = TCODColor.black,
+                Message = $"{room.RoomType.GetName()} - {selectedTaskName}",
+                Options = options
+            }.Show();
+
+            newTask = selectedTask.Clone();
+            newTask.Room = room;
+            newTask.SelectedOption = selectedOption;
+            tasks.Add(newTask);
         }
 
         private void RenderMainPanel() {

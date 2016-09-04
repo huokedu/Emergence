@@ -4,10 +4,10 @@ using libtcod;
 
 namespace Emergence.Entities.HomeBase {
     public class Room {
-        public RoomType? RoomType { get; set; }
+        public RoomType RoomType { get; set; }
         public Dictionary<Direction, Room> Exits { get; set; }
 
-        public Room(RoomType? roomType = null) {
+        public Room(RoomType roomType) {
             RoomType = roomType;
             Exits = new Dictionary<Direction, Room>();
         }
@@ -64,9 +64,7 @@ namespace Emergence.Entities.HomeBase {
             #endregion
         }
         public void RenderLabel(int x, int y) {
-            var labelLines = RoomType.HasValue
-                ? RoomType.Value.GetLabel().Split('\n')
-                : new string[] { "Empty" };
+            var labelLines = RoomType.GetLabel().Split('\n');
             if(labelLines.Length > 1) {
                 y -= 1;
             }

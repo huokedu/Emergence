@@ -21,11 +21,7 @@ namespace Emergence.Entities.ExcursionMap {
             var random = new Random();
             var rectangles = new Rectangle[3];
             for(int i = 0; i < rectangles.Length; ++i) {
-                rectangles[i] = GenerateRandomRectangle(
-                    (Width / 2) + 1, (Width * 3) / 4,
-                    (Height / 2) + 1, (Height * 3) / 4,
-                    random
-                );
+                rectangles[i] = GenerateRandomRectangle(random);
             }
             foreach(var rectangle in rectangles) {
                 rectangle.Fill((x, y) => Tiles[x, y] = '.');
@@ -72,15 +68,12 @@ namespace Emergence.Entities.ExcursionMap {
             return n || ne || e || se || s || sw || w || nw;
         }
 
-        private Rectangle GenerateRandomRectangle(int minWidth, int maxWidth, int minHeight, int maxHeight, Random random) {
-            var width = minWidth + random.Next(maxWidth - minWidth);
-            var height = minHeight + random.Next(maxHeight - minHeight);
-            var maxX = (Width - width) - 2;
-            var maxY = (Height - height) - 2;
-            return new Rectangle(
-                1 + random.Next(maxX), 1 + random.Next(maxY),
-                width, height
-            );
+        private Rectangle GenerateRandomRectangle(Random random) {
+            var left = 1 + random.Next((Width / 2) - 5);
+            var top = 1 + random.Next((Height / 2) - 5);
+            var right = (Width / 2) + random.Next((Width / 2) - 5);
+            var bottom = (Height / 2) + random.Next((Height / 2) - 5);
+            return new Rectangle(left, top, right, bottom);
         }
     }
 }
