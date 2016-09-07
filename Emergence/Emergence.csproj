@@ -89,6 +89,7 @@
     <Compile Include="Scenes\Personnel\PersonnelWoundsScene.cs" />
     <Compile Include="Scenes\Personnel\PersonnelSkillsScene.cs" />
     <Compile Include="Scenes\SplashscreenScene.cs" />
+    <Compile Include="Scenes\TaskBoardScene.cs" />
     <Compile Include="UI\BlockingConfirmationModal.cs" />
     <Compile Include="UI\BlockingMessageModal.cs" />
     <Compile Include="UI\BlockingOptionModal.cs" />

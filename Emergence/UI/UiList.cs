@@ -36,7 +36,7 @@ namespace Emergence.Ui {
 		public int NumberOfPages {
 			get {
 				var pageCount = (Options.Count / PageSize) + 1;
-				if(Options.Count % PageSize == 0) {
+				if(Options.Count % PageSize == 0 && pageCount != 1) {
 					pageCount -= 1;
 				}
 				return pageCount;

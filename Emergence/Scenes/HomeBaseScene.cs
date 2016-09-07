@@ -19,7 +19,7 @@ namespace Emergence.Scenes {
         private int roomSelectionX, roomSelectionY;
 		private int cameraX, cameraY;
 		private bool roomLabelsEnabled;
-        private List<Task> tasks;
+        private List<Task> tasks; // TODO: Move this to Game.State
 
 		public HomeBaseScene(Game game) : base(game) {
 			roomLabelsEnabled = false;
@@ -95,11 +95,7 @@ namespace Emergence.Scenes {
 					).Show();
 					break;
 				case 'T': // [T]ask Board
-					new BlockingMessageModal(
-						Game.Settings.UiForeground,
-						Game.Settings.UiBackground,
-						"This feature is not yet implemented."
-					).Show();
+                    Game.ChangeScene(new TaskBoardScene(Game, this, Game.State.Personnel, tasks));
 					break;
 				case 'G': // [G]o Scavenging
 					new BlockingMessageModal(
