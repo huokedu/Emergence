@@ -19,17 +19,17 @@ namespace Emergence.Scenes {
         private int roomSelectionX, roomSelectionY;
 		private int cameraX, cameraY;
 		private bool roomLabelsEnabled;
-        private List<BaseTask> tasks;
+        private List<Task> tasks;
 
 		public HomeBaseScene(Game game) : base(game) {
 			roomLabelsEnabled = false;
 
             homeBase = new HomeBase(25, 25);
-            homeBase.Rooms[1, 2] = new Room(RoomType.LivingQuarters);
-            homeBase.Rooms[2, 2] = new Room(RoomType.Kitchen);
-            homeBase.Rooms[3, 2] = new Room(RoomType.Gym);
-            homeBase.Rooms[2, 1] = new Room(RoomType.FiringRange);
-            homeBase.Rooms[2, 3] = new Room(RoomType.Generator);
+            homeBase.Rooms[1, 2] = new Room(homeBase, 1, 2, RoomType.LivingQuarters);
+            homeBase.Rooms[2, 2] = new Room(homeBase, 2, 2, RoomType.Kitchen);
+            homeBase.Rooms[3, 2] = new Room(homeBase, 3, 2, RoomType.Gym);
+            homeBase.Rooms[2, 1] = new Room(homeBase, 2, 1, RoomType.FiringRange);
+            homeBase.Rooms[2, 3] = new Room(homeBase, 2, 3, RoomType.Generator);
 
             homeBase.Rooms[1, 2].AddExit(Direction.East, homeBase.Rooms[2, 2]);
             homeBase.Rooms[3, 2].AddExit(Direction.West, homeBase.Rooms[2, 2]);
@@ -45,7 +45,7 @@ namespace Emergence.Scenes {
             roomSelectionX = 1;
             roomSelectionY = 1;
             MoveRoomSelection(0, 0);
-            tasks = new List<BaseTask>();
+            tasks = new List<Task>();
 		}
 
 		public override void Render(float deltaTime) {
@@ -119,11 +119,7 @@ namespace Emergence.Scenes {
 					).Show();
 					break;
 				case 'W': // [W]ait a Day
-					new BlockingMessageModal(
-						Game.Settings.UiForeground,
-						Game.Settings.UiBackground,
-						"This feature is not yet implemented."
-					).Show();
+                    EndDay();
 					break;
 				case 'O': // [O]ptions
 					new BlockingMessageModal(
@@ -178,7 +174,6 @@ namespace Emergence.Scenes {
             TCODConsole.root.printFrame(roomScreenX, roomScreenY, 11, 11, false, TCODBackgroundFlag.None);
         }
         private void SelectRoom() {
-            BaseTask newTask;
             var room = homeBase.Rooms[roomSelectionX, roomSelectionY];
 
             var validTasks = homeBase.GetValidTasks(roomSelectionX, roomSelectionY);
@@ -194,12 +189,9 @@ namespace Emergence.Scenes {
             var selectedTask = validTasks.FirstOrDefault(t => t.Title == selectedTaskName);
             if(selectedTask == null) return;
 
-            var options = selectedTask.GetOptions(homeBase, roomSelectionX, roomSelectionY);
+            var options = selectedTask.GetOptions(room);
             if(options == null || options.Length == 0) {
-                newTask = selectedTask.Clone();
-                newTask.Room = room;
-                newTask.SelectedOption = null;
-                tasks.Add(newTask);
+                tasks.Add(selectedTask.CreateTask(room, null));
                 return;
             }
 
@@ -209,11 +201,13 @@ namespace Emergence.Scenes {
                 Message = $"{room.RoomType.GetName()} - {selectedTaskName}",
                 Options = options
             }.Show();
+            
+            tasks.Add(selectedTask.CreateTask(room, selectedOption));
+        }
 
-            newTask = selectedTask.Clone();
-            newTask.Room = room;
-            newTask.SelectedOption = selectedOption;
-            tasks.Add(newTask);
+        private void EndDay() {
+            tasks.RemoveAll(t => t.Done);
+            tasks.ForEach(t => t.Update());
         }
 
         private void RenderMainPanel() {

@@ -1,65 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Emergence.Entities.Personnel;
+using Emergence.Utilities;
 
 namespace Emergence.Entities.HomeBase.Tasks {
-    public class DigNewRoom :BaseTask {
+    public class DigNewRoom :BaseTaskType {
         public override string Title => "Dig New Room";
         public override string GeneralDescription =>
             "Carves out a new room adjacent to this one.";
         public override int MaxCharacters => 3;
-        public override int TotalTimeToComplete => 6 - Characters.Count;
-
-        public DigNewRoom(Room room) : base(room) { }
-
-        public override BaseTask Clone() {
-            var clone = new DigNewRoom(Room);
-            clone.Characters.AddRange(Characters);
-            clone.TimeSpent = TimeSpent;
-            clone.SelectedOption = SelectedOption;
-            return clone;
-        }
+        public override int TotalTimeToComplete => 6;
 
         public override bool IsValid(Character character) {
             return true;
         }
-        public override bool IsValid(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
+        public override bool IsValid(Room room) {
             if(room == null) return false;
-            return CanDigNorth(homeBase, x, y) ||
-                CanDigSouth(homeBase, x, y) ||
-                CanDigEast(homeBase, x, y) ||
-                CanDigWest(homeBase, x, y);
+            return CanDigNorth(room) ||
+                CanDigSouth(room) ||
+                CanDigEast(room) ||
+                CanDigWest(room);
         }
-        public override string[] GetOptions(HomeBase homeBase, int x, int y) {
+        public override string[] GetOptions(Room room) {
             var optionList = new List<string>();
-            if(CanDigNorth(homeBase, x, y)) optionList.Add("North");
-            if(CanDigSouth(homeBase, x, y)) optionList.Add("South");
-            if(CanDigEast(homeBase, x, y)) optionList.Add("East");
-            if(CanDigWest(homeBase, x, y)) optionList.Add("West");
+            if(CanDigNorth(room)) optionList.Add("North");
+            if(CanDigSouth(room)) optionList.Add("South");
+            if(CanDigEast(room)) optionList.Add("East");
+            if(CanDigWest(room)) optionList.Add("West");
             return optionList.ToArray();
         }
 
-        private bool CanDigNorth(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
-            return y > 0 && homeBase.Rooms[x, y - 1] == null;
+        public override void Process(Task task) {
+            var direction = (Direction)Enum.Parse(
+                typeof(Direction), task.SelectedOption);
+            Room room = task.Room;
+            Room otherRoom = null;
+
+            switch(direction) {
+                case Direction.North:
+                    room.HomeBase.Rooms[room.X, room.Y - 1] =
+                        new Room(room.HomeBase, room.X, room.Y - 1, RoomType.Empty);
+                    otherRoom = room.HomeBase.Rooms[room.X, room.Y - 1];
+                    break;
+                case Direction.South:
+                    room.HomeBase.Rooms[room.X, room.Y + 1] =
+                        new Room(room.HomeBase, room.X, room.Y + 1, RoomType.Empty);
+                    otherRoom = room.HomeBase.Rooms[room.X, room.Y + 1];
+                    break;
+                case Direction.East:
+                    room.HomeBase.Rooms[room.X + 1, room.Y] =
+                        new Room(room.HomeBase, room.X + 1, room.Y, RoomType.Empty);
+                    otherRoom = room.HomeBase.Rooms[room.X + 1, room.Y];
+                    break;
+                case Direction.West:
+                    room.HomeBase.Rooms[room.X - 1, room.Y] =
+                        new Room(room.HomeBase, room.X - 1, room.Y, RoomType.Empty);
+                    otherRoom = room.HomeBase.Rooms[room.X - 1, room.Y];
+                    break;
+            }
+
+            room.AddExit(direction, otherRoom);
         }
-        private bool CanDigSouth(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
-            return y < homeBase.Height - 1 &&
-                homeBase.Rooms[x, y + 1] == null;
+
+        private bool CanDigNorth(Room room) {
+            return room.Y > 0 &&
+                room.HomeBase.Rooms[room.X, room.Y - 1] == null;
         }
-        private bool CanDigEast(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
-            return x < homeBase.Width - 1 &&
-                homeBase.Rooms[x + 1, y] == null;
+        private bool CanDigSouth(Room room) {
+            return room.Y < room.HomeBase.Height - 1 &&
+                room.HomeBase.Rooms[room.X, room.Y + 1] == null;
         }
-        private bool CanDigWest(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
-            return x > 0 && homeBase.Rooms[x - 1, y] == null;
+        private bool CanDigEast(Room room) {
+            return room.X < room.HomeBase.Width - 1 &&
+                room.HomeBase.Rooms[room.X + 1, room.Y] == null;
+        }
+        private bool CanDigWest(Room room) {
+            return room.X > 0 &&
+                room.HomeBase.Rooms[room.X - 1, room.Y] == null;
         }
     }
 }

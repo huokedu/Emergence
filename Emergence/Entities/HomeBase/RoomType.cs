@@ -18,36 +18,37 @@ namespace Emergence.Entities.HomeBase {
     }
 
     public static class RoomTypeExtensions {
+        private static Dictionary<RoomType, string> Labels => 
+            new Dictionary<RoomType, string> {
+                { RoomType.LivingQuarters, "Living\nQrtrs" },
+                { RoomType.FiringRange, "Firing\nRange" },
+                { RoomType.Hospital, "Hsptl" },
+                { RoomType.Generator, "Genratr" },
+                { RoomType.Workshop, "Wrkshop" },
+            };
+        private static Dictionary<RoomType, string> DisplayNames =>
+            new Dictionary<RoomType, string> {
+                { RoomType.LivingQuarters, "Living Quarters" },
+                { RoomType.FiringRange, "Firing Range" },
+            };
+
         public static string GetLabel(this RoomType roomType) {
-            switch(roomType) {
-                case RoomType.LivingQuarters:
-                    return "Living\nQrtrs";
-                case RoomType.FiringRange:
-                    return "Firing\nRange";
-                case RoomType.Hospital:
-                    return "Hsptl";
-                case RoomType.Generator:
-                    return "Genratr";
-                case RoomType.Workshop:
-                    return "Wrkshop";
-            }
-            return roomType.ToString();
+            return Labels.ContainsKey(roomType)
+                ? Labels[roomType] : roomType.ToString();
         }
 
         public static string GetName(this RoomType roomType) {
-            switch(roomType) {
-                case RoomType.LivingQuarters:
-                    return "Living Quarters";
-                case RoomType.FiringRange:
-                    return "Firing Range";
-                case RoomType.Hospital:
-                    return "Hospital";
-                case RoomType.Generator:
-                    return "Generator";
-                case RoomType.Workshop:
-                    return "Workshop";
+            return DisplayNames.ContainsKey(roomType)
+                ? DisplayNames[roomType] : roomType.ToString();
+        }
+
+        public static RoomType FromName(string roomTypeName) {
+            if(DisplayNames.ContainsValue(roomTypeName)) {
+                var keyValuePair =
+                    DisplayNames.FirstOrDefault(kvp => kvp.Value == roomTypeName);
+                return keyValuePair.Key;
             }
-            return roomType.ToString();
+            return (RoomType)Enum.Parse(typeof(RoomType), roomTypeName);
         }
     }
 }

@@ -60,10 +60,11 @@
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\SettingsContract.cs" />
     <Compile Include="Entities\HomeBase\Tasks\AddDoor.cs" />
-    <Compile Include="Entities\HomeBase\Tasks\BaseTask.cs" />
+    <Compile Include="Entities\HomeBase\Tasks\BaseTaskType.cs" />
     <Compile Include="Entities\HomeBase\Tasks\ClearRoom.cs" />
     <Compile Include="Entities\HomeBase\Tasks\DigNewRoom.cs" />
     <Compile Include="Entities\HomeBase\Tasks\RepurposeRoom.cs" />
+    <Compile Include="Entities\HomeBase\Tasks\Task.cs" />
     <Compile Include="Entities\Personnel\Attribute.cs" />
     <Compile Include="Entities\Personnel\Character.cs" />
     <Compile Include="Entities\Personnel\CharacterFactory.cs" />

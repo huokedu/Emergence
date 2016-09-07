@@ -1,68 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Emergence.Entities.Personnel;
+using Emergence.Utilities;
 
 namespace Emergence.Entities.HomeBase.Tasks {
-    public class AddDoor : BaseTask {
+    public class AddDoor : BaseTaskType {
         public override string Title => "Add Door";
         public override string GeneralDescription =>
             "Adds a door between two existing rooms.";
         public override int MaxCharacters => 1;
         public override int TotalTimeToComplete => 1;
 
-        public AddDoor(Room room) : base(room) { }
-
-        public override BaseTask Clone() {
-            var clone = new AddDoor(Room);
-            clone.Characters.AddRange(Characters);
-            clone.TimeSpent = TimeSpent;
-            clone.SelectedOption = SelectedOption;
-            return clone;
-        }
-
         public override bool IsValid(Character character) {
             return true;
         }
-        public override bool IsValid(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
+        public override bool IsValid(Room room) {
             if(room == null) return false;
-            return CanAddNorth(homeBase, x, y) ||
-                CanAddSouth(homeBase, x, y) ||
-                CanAddEast(homeBase, x, y) ||
-                CanAddWest(homeBase, x, y);
+            return CanAddNorth(room) ||
+                CanAddSouth(room) ||
+                CanAddEast(room) ||
+                CanAddWest(room);
         }
-        public override string[] GetOptions(HomeBase homeBase, int x, int y) {
+        public override string[] GetOptions(Room room) {
             var optionList = new List<string>();
-            if(CanAddNorth(homeBase, x, y)) optionList.Add("North");
-            if(CanAddSouth(homeBase, x, y)) optionList.Add("South");
-            if(CanAddEast(homeBase, x, y)) optionList.Add("East");
-            if(CanAddWest(homeBase, x, y)) optionList.Add("West");
+            if(CanAddNorth(room)) optionList.Add("North");
+            if(CanAddSouth(room)) optionList.Add("South");
+            if(CanAddEast(room)) optionList.Add("East");
+            if(CanAddWest(room)) optionList.Add("West");
             return optionList.ToArray();
         }
 
-        private bool CanAddNorth(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
-            return y > 0 && homeBase.Rooms[x, y - 1] != null && 
+        public override void Process(Task task) {
+            var direction = (Direction)Enum.Parse(
+                typeof(Direction), task.SelectedOption);
+            Room room = task.Room;
+            Room otherRoom = null;
+
+            switch(direction) {
+                case Direction.North:
+                    otherRoom = room.HomeBase.Rooms[room.X, room.Y - 1];
+                    break;
+                case Direction.South:
+                    otherRoom = room.HomeBase.Rooms[room.X, room.Y + 1];
+                    break;
+                case Direction.East:
+                    otherRoom = room.HomeBase.Rooms[room.X + 1, room.Y];
+                    break;
+                case Direction.West:
+                    otherRoom = room.HomeBase.Rooms[room.X - 1, room.Y];
+                    break;
+            }
+
+            room.AddExit(direction, otherRoom);
+        }
+
+        private bool CanAddNorth(Room room) {
+            return room.Y > 0 && 
+                room.HomeBase.Rooms[room.X, room.Y - 1] != null && 
                 !room.Exits.ContainsKey(Utilities.Direction.North);
         }
-        private bool CanAddSouth(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
-            return y < homeBase.Height - 1 && 
-                homeBase.Rooms[x, y + 1] != null &&
+        private bool CanAddSouth(Room room) {
+            return room.Y < room.HomeBase.Height - 1 &&
+                room.HomeBase.Rooms[room.X, room.Y + 1] != null &&
                 !room.Exits.ContainsKey(Utilities.Direction.South);
         }
-        private bool CanAddEast(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
-            return x < homeBase.Width - 1 && 
-                homeBase.Rooms[x + 1, y] != null &&
+        private bool CanAddEast(Room room) {
+            return room.X < room.HomeBase.Width - 1 &&
+                room.HomeBase.Rooms[room.X + 1, room.Y] != null &&
                 !room.Exits.ContainsKey(Utilities.Direction.East);
         }
-        private bool CanAddWest(HomeBase homeBase, int x, int y) {
-            var room = homeBase.Rooms[x, y];
-            return x > 0 && homeBase.Rooms[x - 1, y] != null &&
+        private bool CanAddWest(Room room) {
+            return room.X > 0 && 
+                room.HomeBase.Rooms[room.X - 1, room.Y] != null &&
                 !room.Exits.ContainsKey(Utilities.Direction.West);
         }
 

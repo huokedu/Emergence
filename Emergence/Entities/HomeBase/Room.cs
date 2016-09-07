@@ -4,10 +4,16 @@ using libtcod;
 
 namespace Emergence.Entities.HomeBase {
     public class Room {
+        public HomeBase HomeBase { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
         public RoomType RoomType { get; set; }
         public Dictionary<Direction, Room> Exits { get; set; }
 
-        public Room(RoomType roomType) {
+        public Room(HomeBase homeBase, int x, int y, RoomType roomType) {
+            HomeBase = homeBase;
+            X = x;
+            Y = y;
             RoomType = roomType;
             Exits = new Dictionary<Direction, Room>();
         }
