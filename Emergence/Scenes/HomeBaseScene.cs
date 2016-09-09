@@ -19,7 +19,6 @@ namespace Emergence.Scenes {
         private int roomSelectionX, roomSelectionY;
 		private int cameraX, cameraY;
 		private bool roomLabelsEnabled;
-        private List<Task> tasks; // TODO: Move this to Game.State
 
 		public HomeBaseScene(Game game) : base(game) {
 			roomLabelsEnabled = false;
@@ -45,7 +44,6 @@ namespace Emergence.Scenes {
             roomSelectionX = 1;
             roomSelectionY = 1;
             MoveRoomSelection(0, 0);
-            tasks = new List<Task>();
 		}
 
 		public override void Render(float deltaTime) {
@@ -95,7 +93,7 @@ namespace Emergence.Scenes {
 					).Show();
 					break;
 				case 'T': // [T]ask Board
-                    Game.ChangeScene(new TaskBoardScene(Game, this, Game.State.Personnel, tasks));
+                    Game.ChangeScene(new TaskBoardScene(Game, this));
 					break;
 				case 'G': // [G]o Scavenging
 					new BlockingMessageModal(
@@ -187,7 +185,7 @@ namespace Emergence.Scenes {
 
             var options = selectedTask.GetOptions(room);
             if(options == null || options.Length == 0) {
-                tasks.Add(selectedTask.CreateTask(room, null));
+                Game.State.Tasks.Add(selectedTask.CreateTask(room, null));
                 return;
             }
 
@@ -198,12 +196,12 @@ namespace Emergence.Scenes {
                 Options = options
             }.Show();
             
-            tasks.Add(selectedTask.CreateTask(room, selectedOption));
+            Game.State.Tasks.Add(selectedTask.CreateTask(room, selectedOption));
         }
 
         private void EndDay() {
-            tasks.RemoveAll(t => t.Done);
-            tasks.ForEach(t => t.Update());
+            Game.State.Tasks.RemoveAll(t => t.Done);
+            Game.State.Tasks.ForEach(t => t.Update());
         }
 
         private void RenderMainPanel() {

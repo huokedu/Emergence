@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using Emergence.Core;
+﻿using Emergence.Core;
 using Emergence.Entities.HomeBase.Tasks;
-using Emergence.Entities.Personnel;
 using Emergence.Utilities;
 using libtcod;
 
 namespace Emergence.Scenes {
     public class TaskBoardScene : BaseScene {
         BaseScene PreviousScene { get; set; }
-        List<Character> Characters { get; set; }
-        List<Task> Tasks { get; set; }
         Ui.UiList<Task> TaskList { get; set; }
 
-        public TaskBoardScene(Game game, BaseScene previousScene, List<Character> characters, List<Task> tasks) : base(game) {
+        public TaskBoardScene(Game game, BaseScene previousScene) : base(game) {
             PreviousScene = previousScene;
-            Characters = characters;
-            Tasks = tasks;
-            TaskList = new Ui.UiList<Task>(Tasks, RenderTaskListItem);
+            TaskList = new Ui.UiList<Task>(Game.State.Tasks, RenderTaskListItem);
         }
 
         public override void Update(float deltaTime) { }

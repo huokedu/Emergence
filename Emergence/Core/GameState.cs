@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emergence.Entities;
+using Emergence.Entities.HomeBase.Tasks;
 using Emergence.Entities.Personnel;
 
 namespace Emergence.Core {
@@ -11,11 +12,14 @@ namespace Emergence.Core {
         public Dictionary<SupplyType, int> MaxSupplies { get; set; }
         public Dictionary<SupplyType, int> Supplies { get; set; }
 
+        public List<Task> Tasks { get; set; }
+
         public GameState() {
             MaxPersonnel = 5;
             Personnel = new List<Character>();
             MaxSupplies = new Dictionary<SupplyType, int>();
             Supplies = new Dictionary<SupplyType, int>();
+            Tasks = new List<Task>();
 
             foreach(var supplyType in Enum.GetValues(typeof(SupplyType))) {
                 MaxSupplies.Add((SupplyType)supplyType, 30);
